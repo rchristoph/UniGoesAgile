@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+    <CheckBox
+            android:id="@+id/chkDone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/txtTaskDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/chkDone"
+            android:layout_toRightOf="@+id/chkDone"
+            android:text="Item Text"
+
+            android:fontFamily="@font/muli_extralight" android:textSize="18sp"/>
+
+
+    <ImageButton
+            android:id="@+id/btnRemove"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:gravity="end"
+            app:srcCompat="@android:drawable/ic_delete" android:tint="@android:color/holo_red_dark"
+            android:layout_marginEnd="16dp" android:layout_marginRight="16dp"
+            android:adjustViewBounds="true" android:cropToPadding="true"
+            android:layout_marginTop="14dp" android:layout_alignParentTop="true"/>
+
+
+</RelativeLayout>
