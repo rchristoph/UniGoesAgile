@@ -51,7 +51,6 @@ class register : AppCompatActivity() {
                     //Toast.makeText(this, "Successfully registered :)", Toast.LENGTH_LONG).show()
                 }else {
                     Toast.makeText(this, "Error registering, try again later :(", Toast.LENGTH_LONG).show()
-                    Toast.makeText(this, "Error registering, try again later :(", Toast.LENGTH_LONG).show()
                 }
             })
         }else {

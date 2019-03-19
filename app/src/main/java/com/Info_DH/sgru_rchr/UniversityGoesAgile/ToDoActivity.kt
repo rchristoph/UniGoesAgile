@@ -20,6 +20,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
 
     lateinit var _db: DatabaseReference
     val mAuth = FirebaseAuth.getInstance()
+    val user = FirebaseAuth.getInstance().currentUser
 
 
     var _taskList: MutableList<Task>? = null
@@ -44,8 +45,9 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         setContentView(R.layout.activity_todo)
         setSupportActionBar(toolbar)
 
-        _db = FirebaseDatabase.getInstance().getReference("task")
+        _db = FirebaseDatabase.getInstance().getReference("tasks")
         _taskList = mutableListOf<Task>()
+
 
         _adapter = TaskAdapter(this, _taskList!!)
         listviewTask!!.setAdapter(_adapter)
@@ -91,6 +93,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         //Set Task Description and isDone Status
         task.taskDesc = txtNewTaskDesc.text.toString()
         task.done = false
+        task.author = user!!.uid
 
         //Get the object id for the new task from the Firebase Database
         val newTask = _db.child(Statics.FIREBASE_TASK).push()

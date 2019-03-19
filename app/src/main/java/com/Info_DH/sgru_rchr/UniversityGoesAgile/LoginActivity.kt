@@ -16,23 +16,32 @@ import com.google.firebase.auth.FirebaseAuth
 class LoginActivity : AppCompatActivity() {
 
     var mAuth = FirebaseAuth.getInstance()
+    val user = FirebaseAuth.getInstance().currentUser
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val loginBtn = findViewById<View>(R.id.loginBtn) as Button
-        val registerTxt = findViewById<View>(R.id.regTxt) as TextView
 
-        loginBtn.setOnClickListener(View.OnClickListener {
-                view -> login()
-        })
+        if (user != null) {
+            startActivity(Intent(this, ToDoActivity::class.java))
+        } else {
+            val loginBtn = findViewById<View>(R.id.loginBtn) as Button
+            val registerTxt = findViewById<View>(R.id.regTxt) as TextView
 
-        registerTxt.setOnClickListener(View.OnClickListener {
-                view -> register()
-        })
+            loginBtn.setOnClickListener(View.OnClickListener { view ->
+                login()
+            })
 
+            registerTxt.setOnClickListener(View.OnClickListener { view ->
+                register()
+            })
+        }
     }
+
+
 
     private fun login () {
         val emailTxt = findViewById<View>(R.id.emailTxt) as EditText
