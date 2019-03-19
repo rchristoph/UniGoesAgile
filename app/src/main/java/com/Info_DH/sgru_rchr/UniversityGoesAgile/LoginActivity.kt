@@ -43,7 +43,8 @@ class LoginActivity : AppCompatActivity() {
         if (!email.isEmpty() && !password.isEmpty()) {
             this.mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener ( this, OnCompleteListener<AuthResult> { task ->
                 if (task.isSuccessful) {
-                    startActivity(Intent(this, ToDoActivity::class.java))
+                    //startActivity(Intent(this, ToDoActivity::class.java))
+                    startActivity(Intent(this, ChooseProject::class.java))
                     Toast.makeText(this, "Successfully Logged in :)", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(this, "Error Logging in :(", Toast.LENGTH_SHORT).show()

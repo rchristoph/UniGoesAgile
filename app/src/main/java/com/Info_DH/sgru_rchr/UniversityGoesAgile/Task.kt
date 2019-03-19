@@ -8,15 +8,16 @@ class Task {
     var objectId: String? = null
     var taskDesc: String? = null
     var done: Boolean? = false
-}
+    }
 
 class Project {
     companion object Factory {
         fun create(): Project = Project()
+    }
 
     var objectId: String? = null
     var projectName: String? = null
     var DeadLine: String? = null
 
     }
-}
+
