@@ -74,7 +74,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         if(item!!.itemId == R.id.signOut)
         {
             mAuth.signOut()
-            startActivity(Intent(this, ToDoActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
             Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show()
         }
         return super.onOptionsItemSelected(item)
