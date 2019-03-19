@@ -11,14 +11,16 @@ class Task {
     var author: String? = null
     var assignee: String? = null
 }
+    }
 
 class Project {
     companion object Factory {
         fun create(): Project = Project()
+    }
 
     var objectId: String? = null
     var projectName: String? = null
     var DeadLine: String? = null
 
     }
-}
+
