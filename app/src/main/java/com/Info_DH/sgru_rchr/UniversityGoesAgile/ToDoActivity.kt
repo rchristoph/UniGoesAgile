@@ -19,8 +19,18 @@ import com.google.firebase.database.*
 class ToDoActivity : AppCompatActivity(), TaskRowListener {
 
     lateinit var _db: DatabaseReference
+    lateinit var _dbuser: DatabaseReference
+    lateinit var _dbprojekt: DatabaseReference
     val mAuth = FirebaseAuth.getInstance()
     val user = FirebaseAuth.getInstance().currentUser
+    private val myRef: DatabaseReference? = null
+    val uid = user!!.uid
+
+
+
+
+
+
 
 
     var _taskList: MutableList<Task>? = null
@@ -28,7 +38,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
     lateinit var _adapter: TaskAdapter
 
 
-    var _taskListener: ValueEventListener = object : ValueEventListener {
+  /*  var _taskListener: ValueEventListener = object : ValueEventListener {
         //Firebase delivers its data as a dataSnapshot
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             loadTaskList(dataSnapshot)
@@ -37,7 +47,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
             // Getting Item failed, log a message
             Log.w("ToDoActivity", "loadItem:onCancelled", databaseError.toException())
         }
-    }
+    } */
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,12 +55,33 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         setContentView(R.layout.activity_todo)
         setSupportActionBar(toolbar)
 
+
         _db = FirebaseDatabase.getInstance().getReference("tasks")
+
         _taskList = mutableListOf<Task>()
 
 
-        _adapter = TaskAdapter(this, _taskList!!)
-        listviewTask!!.setAdapter(_adapter)
+        //_adapter = TaskAdapter(this, _taskList!!)
+        //listviewTask!!.setAdapter(_adapter)
+        _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
+        _dbuser = FirebaseDatabase.getInstance().getReference("Names")
+
+
+        println("Die uid ist: $uid")
+        _dbuser.child(uid).child("ProjektId").addValueEventListener(object: ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                println("Der Scheiß Wert ist: ${snapshot.value}")
+              //  val testxxx = snapshot.child("ProjektId").getValue()
+                val projektIdent:String = snapshot.value.toString()
+
+                  }
+
+        })
 
 
 
@@ -62,7 +93,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
             addTask()
         }
 
-        _db.orderByKey().addValueEventListener(_taskListener)
+      //  _db.orderByKey().addValueEventListener(_taskListener)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -90,13 +121,31 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         //Declare and Initialise the Task
         val task = Task.create()
 
+       /*
+        println("Das hier ist die Projektid: $projectstring")
+
+        println("Das hier ist das Objekt: $projectdb")
+
+        println("Das hier ist die UseriD: $uid")
+        */
+
+
         //Set Task Description and isDone Status
         task.taskDesc = txtNewTaskDesc.text.toString()
         task.done = false
         task.author = user!!.uid
 
         //Get the object id for the new task from the Firebase Database
+
+
+
+
         val newTask = _db.child(Statics.FIREBASE_TASK).push()
+        //!!!!!!!!!!!!!!!!!!!!!!!
+
+       // val newTask = _dbprojekt.child().push()
+
+
         task.objectId = newTask.key
 
         //Set the values for new task in the firebase using the footer form
@@ -159,3 +208,9 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
 
 
 }
+@IgnoreExtraProperties
+data class Names(
+    var username: String? = "",
+    var projectIdent: String? = "",
+    var projectname: String? = ""
+)
