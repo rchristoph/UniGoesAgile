@@ -25,7 +25,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
     val user = FirebaseAuth.getInstance().currentUser
     private val myRef: DatabaseReference? = null
     val uid = user!!.uid
-
+    var projektIdent:String = ""
 
 
 
@@ -38,7 +38,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
     lateinit var _adapter: TaskAdapter
 
 
-  /*  var _taskListener: ValueEventListener = object : ValueEventListener {
+      var _taskListener: ValueEventListener = object : ValueEventListener {
         //Firebase delivers its data as a dataSnapshot
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             loadTaskList(dataSnapshot)
@@ -47,7 +47,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
             // Getting Item failed, log a message
             Log.w("ToDoActivity", "loadItem:onCancelled", databaseError.toException())
         }
-    } */
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,20 +55,13 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         setContentView(R.layout.activity_todo)
         setSupportActionBar(toolbar)
 
-
-        _db = FirebaseDatabase.getInstance().getReference("tasks")
-
-        _taskList = mutableListOf<Task>()
-
-
-        //_adapter = TaskAdapter(this, _taskList!!)
-        //listviewTask!!.setAdapter(_adapter)
         _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
         _dbuser = FirebaseDatabase.getInstance().getReference("Names")
 
 
         println("Die uid ist: $uid")
-        _dbuser.child(uid).child("ProjektId").addValueEventListener(object: ValueEventListener {
+
+        _dbuser.child(uid).child("ProjektId").addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
@@ -76,12 +69,22 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 
                 println("Der Scheiß Wert ist: ${snapshot.value}")
-              //  val testxxx = snapshot.child("ProjektId").getValue()
-                val projektIdent:String = snapshot.value.toString()
+                //  val testxxx = snapshot.child("ProjektId").getValue()
+                projektIdent = snapshot.value.toString()
 
-                  }
+            }
 
         })
+
+
+        _db = FirebaseDatabase.getInstance().getReference("tasks")
+
+        _taskList = mutableListOf<Task>()
+
+
+        _adapter = TaskAdapter(this, _taskList!!)
+         listviewTask!!.setAdapter(_adapter)
+
 
 
 
@@ -93,7 +96,10 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
             addTask()
         }
 
-      //  _db.orderByKey().addValueEventListener(_taskListener)
+       // _db.orderByKey().addValueEventListener(_taskListener)
+        _dbprojekt.child(projektIdent).child(Statics.FIREBASE_TASK).orderByKey().addValueEventListener(_taskListener)
+        println("das ist _dbproject: $_db")
+        println("das ist _dbproject: $_taskListener")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -121,15 +127,6 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         //Declare and Initialise the Task
         val task = Task.create()
 
-       /*
-        println("Das hier ist die Projektid: $projectstring")
-
-        println("Das hier ist das Objekt: $projectdb")
-
-        println("Das hier ist die UseriD: $uid")
-        */
-
-
         //Set Task Description and isDone Status
         task.taskDesc = txtNewTaskDesc.text.toString()
         task.done = false
@@ -139,11 +136,10 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
 
 
 
-
-        val newTask = _db.child(Statics.FIREBASE_TASK).push()
+        //Neue Tasks werden als Children von dem Projekt angelegt, dem der/die User_in zugewiesen ist.
+        val newTask = _dbprojekt.child(projektIdent).child(Statics.FIREBASE_TASK).push()
         //!!!!!!!!!!!!!!!!!!!!!!!
 
-       // val newTask = _dbprojekt.child().push()
 
 
         task.objectId = newTask.key
@@ -197,20 +193,27 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
 
     }
     override fun onTaskChange(objectId: String, isDone: Boolean) {
-        val task = _db.child(Statics.FIREBASE_TASK).child(objectId)
+        //val task = _db.child(Statics.FIREBASE_TASK).child(objectId)
+        val task = _dbprojekt.child(projektIdent).child(Statics.FIREBASE_TASK).child(objectId)
         task.child("done").setValue(isDone)
     }
 
     override fun onTaskDelete(objectId: String) {
-        val task = _db.child(Statics.FIREBASE_TASK).child(objectId)
+       // val task = _db.child(Statics.FIREBASE_TASK).child(objectId)
+        val task = _dbprojekt.child(projektIdent).child(Statics.FIREBASE_TASK).child(objectId)
         task.removeValue()
     }
 
 
 }
+
+//Erst mal unwichtig, deswegen auskommentiert. Vielleicht später wieder von Bedeutung.
+//Java data class zum Spiechern der Userdaten
+/*
 @IgnoreExtraProperties
 data class Names(
     var username: String? = "",
     var projectIdent: String? = "",
     var projectname: String? = ""
 )
+*/
