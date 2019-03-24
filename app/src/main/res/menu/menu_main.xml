@@ -8,9 +8,17 @@
           android:title="@string/action_settings"
           android:orderInCategory="100"
           app:showAsAction="never"/>
+    <item android:id="@+id/signoutofproject"
+          android:title="Projekt wechseln"
+          app:showAsAction="never"/>
     <item android:title="SignOut"
           android:id="@+id/signOut"
-          app:showAsAction="never"/>
+          app:showAsAction="never"></item>
+    <item
+            android:id="@+id/menu_item_share"
+            android:title="Share Project"
+            app:showAsAction="never"
+            app:actionProviderClass="android.support.v7.widget.ShareActionProvider"></item>
 
 </menu>
 
