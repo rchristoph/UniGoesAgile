@@ -12,4 +12,3 @@ class Task {
     var edit: String? = null
     var assignee: String? = null
 }
-
