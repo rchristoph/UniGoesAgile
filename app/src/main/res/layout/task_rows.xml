@@ -24,16 +24,26 @@
 
     <ImageButton
             android:id="@+id/btnRemove"
-            android:layout_width="wrap_content"
-            android:layout_height="21dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:background="@android:color/transparent"
             android:gravity="end"
             app:srcCompat="@android:drawable/ic_delete" android:tint="@android:color/holo_red_dark"
-            android:layout_marginEnd="16dp" android:layout_marginRight="16dp"
+            android:layout_marginEnd="10dp" android:layout_marginRight="25dp"
             android:adjustViewBounds="true" android:cropToPadding="true"
-            android:layout_marginTop="14dp" android:layout_alignParentTop="true"/>
-
+            style="@style/Widget.AppCompat.ImageButton" android:layout_marginTop="5dp"
+            android:layout_alignParentTop="true"/>
+    <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp" app:srcCompat="@android:drawable/ic_menu_edit"
+            android:id="@+id/editTask" android:layout_toStartOf="@+id/btnRemove" android:layout_marginEnd="19dp"
+            android:layout_marginTop="5dp" android:layout_alignParentTop="true"/>
+    <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp" app:srcCompat="@drawable/dog"
+            android:id="@+id/assign" android:layout_toStartOf="@+id/editTask" android:layout_marginEnd="19dp"
+            android:layout_marginTop="5dp" android:layout_alignParentTop="true"/>
 
 </RelativeLayout>

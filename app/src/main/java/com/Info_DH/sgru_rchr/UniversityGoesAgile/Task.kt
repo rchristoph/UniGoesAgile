@@ -9,9 +9,10 @@ class Task {
     var taskDesc: String? = null
     var done: Boolean? = false
     var author: String? = null
+    var edit: String? = null
     var assignee: String? = null
 }
-    }
+
 
 class Project {
     companion object Factory {

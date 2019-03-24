@@ -1,13 +1,13 @@
 package com.Info_DH.sgru_rchr.UniversityGoesAgile
 
 import android.content.Context
+import android.content.Intent
+import android.support.v4.content.ContextCompat.startActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.CheckBox
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
+import com.google.firebase.database.snapshot.EmptyNode
 
 
 class TaskAdapter(context: Context, taskList: MutableList<Task>) : BaseAdapter() {
@@ -21,6 +21,7 @@ class TaskAdapter(context: Context, taskList: MutableList<Task>) : BaseAdapter()
         val objectId: String = _taskList.get(position).objectId as String
         val itemText: String = _taskList.get(position).taskDesc as String
         val done: Boolean = _taskList.get(position).done as Boolean
+        val taskDesc: String = _taskList.get(position).taskDesc as String
 
         val view: View
         val listRowHolder: ListRowHolder
@@ -41,13 +42,22 @@ class TaskAdapter(context: Context, taskList: MutableList<Task>) : BaseAdapter()
             _rowListener.onTaskChange(objectId, !done)
         }
 
+        listRowHolder.edit.setOnClickListener {
+            _rowListener.onTaskEdit(objectId, taskDesc)
+            }
+
+
+
         listRowHolder.remove.setOnClickListener {
             _rowListener.onTaskDelete(objectId) }
 
         return view
     }
 
-    override fun getItem(index: Int): Any {
+
+
+
+        override fun getItem(index: Int): Any {
         return _taskList.get(index)
     }
 
@@ -59,9 +69,12 @@ class TaskAdapter(context: Context, taskList: MutableList<Task>) : BaseAdapter()
         return _taskList.size
     }
 
+    //das sind die Funktionen hinter den Icons in der Liste
     private class ListRowHolder(row: View?) {
         val desc: TextView = row!!.findViewById(R.id.txtTaskDesc) as TextView
         val done: CheckBox = row!!.findViewById(R.id.chkDone) as CheckBox
         val remove: ImageButton = row!!.findViewById(R.id.btnRemove) as ImageButton
+        val edit: ImageView = row!!.findViewById(R.id.editTask) as ImageView
+
     }
 }

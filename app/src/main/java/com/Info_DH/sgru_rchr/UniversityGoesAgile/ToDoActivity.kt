@@ -11,8 +11,6 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_todo.*
 import kotlinx.android.synthetic.main.content_main.*
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.*
 
 
@@ -20,7 +18,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
 
     lateinit var _db: DatabaseReference
     val mAuth = FirebaseAuth.getInstance()
-    val user = FirebaseAuth.getInstance().currentUser
+    val user = mAuth.currentUser
 
 
     var _taskList: MutableList<Task>? = null
@@ -30,6 +28,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
 
     var _taskListener: ValueEventListener = object : ValueEventListener {
         //Firebase delivers its data as a dataSnapshot
+        //sobald sich die Daten der Liste aendern muss die Liste neu geladen werden
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             loadTaskList(dataSnapshot)
         }
@@ -94,6 +93,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         task.taskDesc = txtNewTaskDesc.text.toString()
         task.done = false
         task.author = user!!.uid
+        task.edit = ""
 
         //Get the object id for the new task from the Firebase Database
         val newTask = _db.child(Statics.FIREBASE_TASK).push()
@@ -115,6 +115,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         Log.d("ToDoActivity", "loadTaskList")
 
         val tasks = dataSnapshot.children.iterator()
+        Log.d("TodoActivity", "TodoActHier ein Snapshot:$tasks")
 
         //Check if current database contains any collection
         if (tasks.hasNext()) {
@@ -139,6 +140,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
                 task.objectId = currentItem.key
                 task.done = map.get("done") as Boolean?
                 task.taskDesc = map.get("taskDesc") as String?
+                //task.edit = map.get("edit") as String?
                 _taskList!!.add(task)
             }
         }
@@ -156,6 +158,11 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         val task = _db.child(Statics.FIREBASE_TASK).child(objectId)
         task.removeValue()
     }
-
-
+    override fun onTaskEdit(objectId: String, taskDesc: String) {
+        //hier nehme ich die Task-ID, von der aus ich in der naechsten Activity direkt auf die Childnodes zugreifen kann
+        val intent = Intent(this@ToDoActivity, EditTask::class.java)
+        intent.putExtra("obID", objectId)
+        intent.putExtra("tDesc", taskDesc)
+        startActivity(intent)
+    }
 }
