@@ -2,6 +2,7 @@ package com.Info_DH.sgru_rchr.UniversityGoesAgile
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -18,7 +19,7 @@ import android.support.v7.widget.ShareActionProvider
 
 
 
-class ToDoActivity : AppCompatActivity(), TaskRowListener {
+class ToDoActivity  : AppCompatActivity(), TaskRowListener {
 
     lateinit var _db: DatabaseReference
     lateinit var _dbuser: DatabaseReference
