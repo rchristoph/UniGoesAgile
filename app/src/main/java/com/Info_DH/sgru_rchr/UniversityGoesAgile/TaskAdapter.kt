@@ -1,12 +1,14 @@
 package com.Info_DH.sgru_rchr.UniversityGoesAgile
 
-import android.content.Context
+//import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat.startActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import android.content.Context
+import android.support.v4.app.Fragment
 import com.google.firebase.database.snapshot.EmptyNode
 
 
@@ -17,6 +19,7 @@ class TaskAdapter(context: Context, taskList: MutableList<Task>) : BaseAdapter()
     private var _rowListener: TaskRowListener = context as TaskRowListener
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+
 
         val objectId: String = _taskList.get(position).objectId as String
         val itemText: String = _taskList.get(position).taskDesc as String
