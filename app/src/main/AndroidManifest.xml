@@ -13,12 +13,10 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity
-                android:name=".Navigationdrawer"
-                android:label="@string/title_activity_navigationdrawer"
-                android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".EditTask">
+
+        <activity android:name=".EditTask"
+                  android:theme="@style/AppTheme.NoActionBar">
+
         </activity>
         <activity android:name=".ChooseProject">
         </activity>

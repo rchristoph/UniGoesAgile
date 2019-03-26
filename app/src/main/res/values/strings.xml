@@ -10,4 +10,17 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
+
+
+    <string-array name="animal_arrays">
+        <item>Wähle ein Tier</item>
+        <item>Ameisenbär</item>
+        <item>Giraffe</item>
+        <item>Maulwurf</item>
+        <item>Löwe</item>
+        <item>Kranich</item>
+        <item>Wiesel</item>
+        <item>Meerkatze</item>
+        <item>Wolf</item>
+    </string-array>
 </resources>

@@ -6,6 +6,7 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_navigationdrawer.*
@@ -28,11 +29,12 @@ import android.graphics.BitmapFactory
 import android.graphics.Bitmap
 
 
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.task_rows.*
 
 
 class ToDoActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, TaskRowListener {
 
-    lateinit var _db: DatabaseReference
     lateinit var _dbuser: DatabaseReference
     lateinit var _dbprojekt: DatabaseReference
     val mAuth = FirebaseAuth.getInstance()
@@ -42,6 +44,9 @@ class ToDoActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     var projektIdent:String = ""
     private var shareActionProvider: ShareActionProvider? = null
     var _taskList: MutableList<Task>? = null
+    var nameIdent : String = ""
+    var nickWert2: String  = ""
+
 
     lateinit var _adapter: TaskAdapter
 
@@ -53,7 +58,6 @@ class ToDoActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_navigationdrawer)
 
         _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
-        _db = FirebaseDatabase.getInstance().getReference("tasks")
         _dbuser = FirebaseDatabase.getInstance().getReference("Names")
         val imageView = findViewById<ImageView>(R.id.Profilbild)
 
@@ -63,6 +67,7 @@ class ToDoActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         println("Die uid ist: $uid")
+
 
 
         var _taskListener = object : ValueEventListener {
@@ -92,6 +97,7 @@ class ToDoActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                 println("Die Projektident vorm Funktionsstart ist: $projektIdent")
                 if (snapshot.child("ProjektId").value == null){
+                
                     startChoose()
                 }
                 _dbprojekt.child(projektIdent).orderByKey().addValueEventListener(_taskListener)
@@ -99,9 +105,9 @@ class ToDoActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         _taskList = mutableListOf<Task>()
-
         _adapter = TaskAdapter(this, _taskList!!)
-        listviewTask!!.setAdapter(_adapter)
+
+         listviewTask!!.setAdapter(_adapter)
 
 
         fab.setOnClickListener {view ->
@@ -208,6 +214,7 @@ class ToDoActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         task.done = false
         task.author = user!!.uid
         task.edit = ""
+        task.assignee = "leer"
 
         //Get the object id for the new task from the Firebase Database
         //Neue Tasks werden als Children von dem Projekt angelegt, dem der/die User_in zugewiesen ist.
@@ -256,6 +263,8 @@ class ToDoActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 task.objectId = currentItem.key
                 task.done = map.get("done") as Boolean?
                 task.taskDesc = map.get("taskDesc") as String?
+                task.assignee = map.get("assignee") as String?
+
                 //task.edit = map.get("edit") as String?
                 _taskList!!.add(task)
             }
@@ -288,7 +297,47 @@ class ToDoActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         intent.putExtra("obID", objectId)
         intent.putExtra("tDesc", taskDesc)
         startActivity(intent)
+
     }
+
+    override fun onTaskAssign(objectId: String) {
+        _dbuser = FirebaseDatabase.getInstance().getReference("Names").child(uid)
+        if (nickWert2.isEmpty()) {
+
+            var _nameListener = object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    println("Der  Wert ist: ${snapshot.value}")
+                    nameIdent = snapshot.value.toString()
+                    println("Die Name ident vorm Funktionsstart ist: $nameIdent")
+                    println("Meine uid ist: $uid")
+                    var nickWert = snapshot.child("nickName")
+                    var nickWert2 = nickWert.getValue().toString()
+                    println("NICKWERT:$nickWert")
+                    zsFassung(nickWert2, objectId)
+
+                }
+
+            }
+
+            _dbuser.child(nameIdent).addValueEventListener(_nameListener)
+        } else {
+            zsFassung(nickWert2, objectId)
+        }
+    }
+
+    private fun zsFassung (nickWert:String, objectId: String) {
+
+        var stelle = _dbprojekt.child(projektIdent).child("tasks/task").child(objectId).child("assignee")
+        stelle.setValue(nickWert)
+    }
+
+
+    }
+
 
 
 

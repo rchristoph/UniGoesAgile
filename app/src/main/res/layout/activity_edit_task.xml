@@ -7,6 +7,9 @@
         android:layout_height="match_parent"
         tools:context=".EditTask">
 
+
+
+
     <TextView
             android:text="TextView"
             android:layout_width="wrap_content"
@@ -14,33 +17,10 @@
             android:id="@+id/showTaskTitle"
             android:textSize="30sp" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="15dp" android:layout_marginTop="32dp" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.029"/>
+            android:layout_marginStart="15dp" android:layout_marginTop="40dp" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.003"/>
 
-    <android.support.design.widget.TextInputLayout
-            android:layout_width="329dp"
-            android:layout_height="150dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" android:id="@+id/textInputLayout6"
-            android:textColorHint="@android:color/black" android:hint="UserStory">
 
-        <android.support.design.widget.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:hint="User Story" android:id="@+id/storyDescription"/>
-    </android.support.design.widget.TextInputLayout>
-    <Button
-            android:text="Save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/save_button" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout6" app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintVertical_bias="0.152"/>
     <TextView
             android:text="TextView"
             android:layout_width="wrap_content"
@@ -48,5 +28,46 @@
             android:id="@+id/newTextView" android:layout_marginTop="36dp"
             app:layout_constraintTop_toBottomOf="@+id/showTaskTitle" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
-            android:textSize="20sp" android:layout_marginStart="15dp" android:paddingStart="15dp"/>
+            android:textSize="20sp" android:layout_marginStart="8dp" android:paddingStart="7dp"
+            android:visibility="visible"/>
+    <Button
+            android:text="Edit"
+            android:layout_width="387dp"
+            android:layout_height="59dp"
+            android:id="@+id/edit_btn" android:visibility="visible" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:layout_marginBottom="272dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/newTextView"
+            app:layout_constraintVertical_bias="0.358"/>
+
+
+    <Button
+            android:text="Save"
+            android:layout_width="387dp"
+            android:layout_height="59dp"
+            android:id="@+id/save_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/edit_btn" android:layout_marginTop="16dp"/>
+
+    <android.support.design.widget.TextInputLayout
+            android:layout_width="378dp"
+            android:layout_height="150dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+            android:textColorHint="@android:color/black" android:hint="UserStory"
+            android:visibility="gone"
+            app:layout_constraintHorizontal_bias="0.235" android:id="@+id/textInputLayout6"
+            app:layout_constraintBottom_toTopOf="@+id/save_button" android:layout_marginBottom="16dp"
+            android:layout_marginTop="36dp" app:layout_constraintTop_toBottomOf="@+id/showTaskTitle">
+
+        <android.support.design.widget.TextInputEditText
+                android:layout_width="378dp"
+                android:layout_height="150dp"
+                android:hint="User Story" android:id="@+id/storyDescription" android:visibility="gone"/>
+    </android.support.design.widget.TextInputLayout>
+
 </android.support.constraint.ConstraintLayout>
