@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -15,12 +14,12 @@ import kotlinx.android.synthetic.main.activity_todo.*
 import kotlinx.android.synthetic.main.content_main.*
 import com.google.firebase.database.*
 import android.support.v7.widget.ShareActionProvider
-
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.task_rows.*
 
 
 class ToDoActivity : AppCompatActivity(), TaskRowListener {
 
-    lateinit var _db: DatabaseReference
     lateinit var _dbuser: DatabaseReference
     lateinit var _dbprojekt: DatabaseReference
     val mAuth = FirebaseAuth.getInstance()
@@ -30,6 +29,9 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
     var projektIdent:String = ""
     private var shareActionProvider: ShareActionProvider? = null
     var _taskList: MutableList<Task>? = null
+    var nameIdent : String = ""
+    var nickWert2: String  = ""
+
 
     lateinit var _adapter: TaskAdapter
 
@@ -37,10 +39,10 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_todo)
         _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
-        _db = FirebaseDatabase.getInstance().getReference("tasks")
         _dbuser = FirebaseDatabase.getInstance().getReference("Names")
 
         println("Die uid ist: $uid")
+
 
 
         var _taskListener = object : ValueEventListener {
@@ -65,6 +67,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
                 println("Der  Wert ist: ${snapshot.value}")
                 projektIdent = snapshot.value.toString()
                 println("Die Projektident vorm Funktionsstart ist: $projektIdent")
+                println("Meine uid ist: $uid")
                 if (snapshot.value == null){
                     startChoose()
                 }
@@ -73,8 +76,8 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         }
 
         _taskList = mutableListOf<Task>()
-
         _adapter = TaskAdapter(this, _taskList!!)
+
          listviewTask!!.setAdapter(_adapter)
 
 
@@ -147,6 +150,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         task.done = false
         task.author = user!!.uid
         task.edit = ""
+        task.assignee = "leer"
 
         //Get the object id for the new task from the Firebase Database
         //Neue Tasks werden als Children von dem Projekt angelegt, dem der/die User_in zugewiesen ist.
@@ -195,6 +199,8 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
                 task.objectId = currentItem.key
                 task.done = map.get("done") as Boolean?
                 task.taskDesc = map.get("taskDesc") as String?
+                task.assignee = map.get("assignee") as String?
+
                 //task.edit = map.get("edit") as String?
                 _taskList!!.add(task)
             }
@@ -227,6 +233,45 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         intent.putExtra("obID", objectId)
         intent.putExtra("tDesc", taskDesc)
         startActivity(intent)
+
     }
-}
+
+    override fun onTaskAssign(objectId: String) {
+        _dbuser = FirebaseDatabase.getInstance().getReference("Names").child(uid)
+        if (nickWert2.isEmpty()) {
+
+            var _nameListener = object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    println("Der  Wert ist: ${snapshot.value}")
+                    nameIdent = snapshot.value.toString()
+                    println("Die Name ident vorm Funktionsstart ist: $nameIdent")
+                    println("Meine uid ist: $uid")
+                    var nickWert = snapshot.child("nickName")
+                    var nickWert2 = nickWert.getValue().toString()
+                    println("NICKWERT:$nickWert")
+                    zsFassung(nickWert2, objectId)
+
+                }
+
+            }
+
+            _dbuser.child(nameIdent).addValueEventListener(_nameListener)
+        } else {
+            zsFassung(nickWert2, objectId)
+        }
+    }
+
+    private fun zsFassung (nickWert:String, objectId: String) {
+
+        var stelle = _dbprojekt.child(projektIdent).child("tasks/task").child(objectId).child("assignee")
+        stelle.setValue(nickWert)
+    }
+
+
+    }
+
 

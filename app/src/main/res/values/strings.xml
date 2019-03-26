@@ -4,4 +4,17 @@
     <string name="title_activity_timeline">Timeline</string>
     <string name="title_activity_register">register</string>
     <string name="title_activity_login">LoginActivity</string>
+
+
+    <string-array name="animal_arrays">
+        <item>Wähle ein Tier</item>
+        <item>Ameisenbär</item>
+        <item>Giraffe</item>
+        <item>Maulwurf</item>
+        <item>Löwe</item>
+        <item>Kranich</item>
+        <item>Wiesel</item>
+        <item>Meerkatze</item>
+        <item>Wolf</item>
+    </string-array>
 </resources>

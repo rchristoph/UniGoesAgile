@@ -41,13 +41,13 @@
 
     <Button
             android:id="@+id/loginBtn"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="48dp"
-            android:layout_marginTop="72dp"
+            android:layout_width="378dp"
+            android:layout_height="59dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="44dp"
             android:text="Login"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout"/>
 
     <TextView
             android:id="@+id/regTxt"
@@ -55,10 +55,10 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="72dp"
+            android:layout_marginTop="60dp"
             android:text="Register here"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
+            app:layout_constraintTop_toBottomOf="@+id/loginBtn"/>
 </android.support.constraint.ConstraintLayout>

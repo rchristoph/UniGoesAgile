@@ -43,7 +43,15 @@
     <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp" app:srcCompat="@drawable/dog"
-            android:id="@+id/assign" android:layout_toStartOf="@+id/editTask" android:layout_marginEnd="19dp"
-            android:layout_marginTop="5dp" android:layout_alignParentTop="true"/>
+            android:id="@+id/btnassign" android:layout_toStartOf="@+id/editTask" android:layout_marginEnd="19dp"
+            android:layout_marginTop="5dp" android:layout_alignParentTop="true" android:visibility="visible"/>
+
+    <TextView
+            android:id="@+id/nickNm"
+            android:layout_width="52dp"
+            android:layout_height="25dp"
+            android:layout_toStartOf="@+id/editTask" android:layout_marginEnd="19dp"
+            android:layout_marginTop="5dp" android:layout_alignParentTop="true" android:visibility="gone"
+            android:text="Wiesel" android:fontFamily="casual" android:textColor="@color/colorAccent"/>
 
 </RelativeLayout>

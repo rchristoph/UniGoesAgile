@@ -9,14 +9,13 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_register.*
+import kotlinx.android.synthetic.main.task_rows.*
 import java.util.*
 
 class register : AppCompatActivity() {
@@ -43,6 +42,17 @@ class register : AppCompatActivity() {
             intent.type = "image/*"
             startActivityForResult(intent, 0)
         }
+
+        val adapter = ArrayAdapter.createFromResource(this,
+            R.array.animal_arrays, android.R.layout.simple_spinner_item)
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        // Apply the adapter to the spinner
+        spinner1.adapter = adapter
+
+
+
+
     }
 
     var selectedPhotoUri: Uri? = null
@@ -66,12 +76,15 @@ class register : AppCompatActivity() {
         val emailTxt = findViewById<View>(R.id.emailTxt) as EditText
         val passwordTxt = findViewById<View>(R.id.passwordTxt) as EditText
         val nameTxt = findViewById<View>(R.id.nameTxt) as EditText
+        val nickName = findViewById<View>(R.id.spinner1) as Spinner
 
         var email = emailTxt.text.toString()
         var password = passwordTxt.text.toString()
         var name = nameTxt.text.toString()
+        var nick = nickName.selectedItem.toString()
+        println("Das ist der Nickname: $nick")
 
-        if (!email.isEmpty() && !password.isEmpty() && !name.isEmpty()) {
+        if (!email.isEmpty() && !password.isEmpty() && !name.isEmpty() &&nick!="Wähle ein Tier") {
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val user = mAuth.currentUser
@@ -112,7 +125,7 @@ class register : AppCompatActivity() {
         val uid = FirebaseAuth.getInstance().uid ?:""
         val ref = FirebaseDatabase.getInstance().getReference("/Names/$uid")
 
-        val user = User(uid, nameTxt.text.toString(), profileImageUrl)
+        val user = User(uid, nameTxt.text.toString(), profileImageUrl, spinner1.selectedItem.toString())
         ref.setValue(user)
             .addOnSuccessListener {
                 Log.d("register", "Finally saved")
@@ -121,5 +134,5 @@ class register : AppCompatActivity() {
 }
 
 
-class User(val uid:String, val username: String, val profileImageUrl:String)
+class User(val uid:String, val username: String, val profileImageUrl:String, val nickName: String)
 
