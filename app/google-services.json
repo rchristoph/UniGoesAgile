@@ -67,41 +67,10 @@
       },
       "oauth_client": [
         {
-          "client_id": "746590444030-pskn6v0bpoq9uia0dvn8940eg94rp7q8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDIUiWPNCKPe2BT-jxxG-gnpbezmGbcm3c"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:746590444030:android:94ddbb245fa723d0",
-        "android_client_info": {
-          "package_name": "com.example.roti.todolist100"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "746590444030-omto9e7as17qlus00g8iim7e51nkmi26.apps.googleusercontent.com",
+          "client_id": "746590444030-1j6qadvcrdb09appi29p06133e0skill.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.roti.todolist100",
+            "package_name": "com.appnimiacademy.firkotasky",
             "certificate_hash": "dc915f824da079e99751508d19970e6c64d57758"
           }
         },
@@ -135,17 +104,17 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:746590444030:android:2d3c70fb7cf2f1b9",
+        "mobilesdk_app_id": "1:746590444030:android:94ddbb245fa723d0",
         "android_client_info": {
-          "package_name": "com.example.roti.universitygoesagile_login"
+          "package_name": "com.example.roti.todolist100"
         }
       },
       "oauth_client": [
         {
-          "client_id": "746590444030-e649kj1jicfag37270icfl1a8cvfc0g8.apps.googleusercontent.com",
+          "client_id": "746590444030-omto9e7as17qlus00g8iim7e51nkmi26.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.roti.universitygoesagile_login",
+            "package_name": "com.example.roti.todolist100",
             "certificate_hash": "dc915f824da079e99751508d19970e6c64d57758"
           }
         },

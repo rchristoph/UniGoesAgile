@@ -80,4 +80,13 @@ class TaskAdapter(context: Context, taskList: MutableList<Task>) : BaseAdapter()
         val edit: ImageView = row!!.findViewById(R.id.editTask) as ImageView
 
     }
+
+    interface TaskRowListener {
+
+        fun onTaskChange(objectId: String, isDone: Boolean)
+        fun onTaskDelete(objectId: String)
+        fun onTaskEdit(objectId: String, taskDesc:String)
+
+    }
+
 }

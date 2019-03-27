@@ -24,6 +24,11 @@ class Todofragment : Fragment(), TaskRowListener {
 
 
 
+
+
+
+
+
     lateinit var _db: DatabaseReference
     lateinit var _dbuser: DatabaseReference
     lateinit var _dbprojekt: DatabaseReference
@@ -34,6 +39,7 @@ class Todofragment : Fragment(), TaskRowListener {
     var projektIdent:String = ""
     private var shareActionProvider: ShareActionProvider? = null
     var _taskList: MutableList<Task>? = null
+
 
     lateinit var _adapter: TaskAdapter
 
@@ -53,12 +59,11 @@ class Todofragment : Fragment(), TaskRowListener {
     }
 
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
+        //   listener = context as? OnArticleSelectedListener
 
-        _taskList = mutableListOf<Task>()
-        println("This is the context: ${getActivity()}")
-        _adapter = TaskAdapter(activity, _taskList!!)
+        println("This is getactivitiy in onattach $activity")
 
 
     }
@@ -108,25 +113,23 @@ class Todofragment : Fragment(), TaskRowListener {
                 println("Der  Wert ist: ${snapshot.value}")
                 projektIdent = snapshot.value.toString()
                 println("Die Projektident vorm Funktionsstart ist: $projektIdent")
-                if (snapshot.value == null){
-                    startChoose()
-                }
+
                 _dbprojekt.child(projektIdent).orderByKey().addValueEventListener(_taskListener)
             }
+
+
+
+
+
+
         }
 
 
-        //  listviewTask!!.setAdapter(_adapter)
 
 
-      /*  fab.setOnClickListener {view ->
-            showFooter()
-        }
 
-        btnAdd.setOnClickListener{ view ->
-        //    addTask()
-        }
-*/
+
+
         //_db.orderByKey().addValueEventListener(_taskListener)
         _dbuser.child(uid).child("ProjektId").addValueEventListener(_projectListener)
         println("Die Projektident nr ist diese hier: $projektIdent")
@@ -140,11 +143,15 @@ class Todofragment : Fragment(), TaskRowListener {
 
 
 
+        _taskList = mutableListOf<Task>()
+        println("This is the context: ${getActivity()}")
 
 
 
 
 
+        _adapter = TaskAdapter(activity, _taskList!!)
+        listviewTask!!.setAdapter(_adapter)
 
 
 
@@ -153,10 +160,7 @@ class Todofragment : Fragment(), TaskRowListener {
     }
 
 
-    fun showFooter(){
-        footer.visibility = View.VISIBLE
-        fab.visibility = View.GONE
-    }
+
 
 
 
@@ -199,44 +203,12 @@ class Todofragment : Fragment(), TaskRowListener {
 
 
 
-    private fun startChoose(){
-        println("Wir sind in der richtigen Funktion")
-      //  startActivity(Intent(this, ChooseProject::class.java))
-      //  Toast.makeText(this, "Choose Project", Toast.LENGTH_LONG).show()
-    }
 
 
 
 
-    fun addTask(){
 
-        //Declare and Initialise the Task
-        val task = Task.create()
 
-        //Set Task Description and isDone Status
-        task.taskDesc = txtNewTaskDesc.text.toString()
-        task.done = false
-        task.author = user!!.uid
-        task.edit = ""
-
-        //Get the object id for the new task from the Firebase Database
-        //Neue Tasks werden als Children von dem Projekt angelegt, dem der/die User_in zugewiesen ist.
-        val newTask = _dbprojekt.child(projektIdent).child("tasks").child("task").push()
-
-        task.objectId = newTask.key
-
-        //Set the values for new task in the firebase using the footer form
-        newTask.setValue(task)
-
-        //Hide the footer and show the floating button
-        footer.visibility = View.GONE
-        fab.visibility = View.VISIBLE
-
-        //Reset the new task description field for reuse.
-        txtNewTaskDesc.setText("")
-
-      //  Toast.makeText(this, "New Task added to the List successfully" + task.objectId, Toast.LENGTH_SHORT).show()
-    }
 
 
 
@@ -254,11 +226,22 @@ class Todofragment : Fragment(), TaskRowListener {
     }
     override fun onTaskEdit(objectId: String, taskDesc: String) {
         //hier nehme ich die Task-ID, von der aus ich in der naechsten Activity direkt auf die Childnodes zugreifen kann
-        val intent = Intent(context, EditTask::class.java)
+        val intent = Intent(getActivity(), EditTask::class.java)
         intent.putExtra("obID", objectId)
         intent.putExtra("tDesc", taskDesc)
         startActivity(intent)
     }
+
+    interface TaskRowListener {
+
+        fun onTaskChange(objectId: String, isDone: Boolean)
+        fun onTaskDelete(objectId: String)
+        fun onTaskEdit(objectId: String, taskDesc:String)
+
+    }
+
+
+
 }
 
 
