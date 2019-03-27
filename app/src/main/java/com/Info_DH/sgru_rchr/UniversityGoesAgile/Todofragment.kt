@@ -24,13 +24,17 @@ import android.app.Activity
 
 
 class Todofragment : Fragment(), TaskRowListener {
+    override fun onTaskChange(objectId: String, isDone: Boolean) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
+    override fun onTaskDelete(objectId: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
-
-
-
-
-
+    override fun onTaskEdit(objectId: String, taskDesc: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     lateinit var _db: DatabaseReference
     lateinit var _dbuser: DatabaseReference
@@ -62,39 +66,9 @@ class Todofragment : Fragment(), TaskRowListener {
     }
 
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        val a: Activity
-
-        if (context is Activity) {
-            a = context
-        }
-
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        _taskList = mutableListOf<Task>()
-
-        println("This is the context: ${getActivity()}")
-        println("This is this: $this")
-        println("This is tasklist: $_taskList")
-//        println("This is adapter: $_adapter")
-
-
-
-        _adapter = TaskAdapter(activity, _taskList!!)
-
-
-
-
-        listviewTask!!.setAdapter(_adapter)
-
-
-
 
     }
 
@@ -110,13 +84,12 @@ class Todofragment : Fragment(), TaskRowListener {
 
         super.onCreate(savedInstanceState)
 
-     //   setContentView(R.layout.activity_todo)
+
         _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
         _db = FirebaseDatabase.getInstance().getReference("tasks")
         _dbuser = FirebaseDatabase.getInstance().getReference("Names")
 
         println("Die uid ist: $uid")
-
 
         Toast.makeText(context, "Es funktioniert!!!", Toast.LENGTH_LONG).show()
 
@@ -146,50 +119,30 @@ class Todofragment : Fragment(), TaskRowListener {
 
                 _dbprojekt.child(projektIdent).orderByKey().addValueEventListener(_taskListener)
             }
-
-
-
-
-
-
         }
-
-
-
-
-
-
 
         //_db.orderByKey().addValueEventListener(_taskListener)
         _dbuser.child(uid).child("ProjektId").addValueEventListener(_projectListener)
         println("Die Projektident nr ist diese hier: $projektIdent")
         println("das ist _dbproject: $_taskListener")
 
+        _taskList = mutableListOf<Task>()
+
+        println("This is the context: ${getActivity()}")
+        println("This is this: $this")
+        println("This is tasklist: $_taskList")
+//      println("This is adapter: $_adapter")
 
 
 
 
+        _adapter = TaskAdapter(this,context, _taskList!!)
 
-
-
-
-
-
-
+        listviewTask!!.setAdapter(_adapter)
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_todofragment, container, false)
     }
-
-
-
-
-
-
-
-
-
-
 
 
     private fun loadTaskList(dataSnapshot: DataSnapshot) {
@@ -228,47 +181,6 @@ class Todofragment : Fragment(), TaskRowListener {
         //alert adapter that has changed
         _adapter.notifyDataSetChanged()
     }
-
-
-
-
-
-
-
-
-
-
-
-
-    override fun onTaskChange(objectId: String, isDone: Boolean) {
-        //val task = _db.child(Statics.FIREBASE_TASK).child(objectId)
-        val task = _dbprojekt.child(projektIdent).child("tasks").child("task").child(objectId)
-        task.child("done").setValue(isDone)
-    }
-
-    override fun onTaskDelete(objectId: String) {
-        // val task = _db.child(Statics.FIREBASE_TASK).child(objectId)
-        val task = _dbprojekt.child(projektIdent).child("tasks").child("task").child(objectId)
-        task.removeValue()
-        println("Das ist ist task: $task")
-    }
-    override fun onTaskEdit(objectId: String, taskDesc: String) {
-        //hier nehme ich die Task-ID, von der aus ich in der naechsten Activity direkt auf die Childnodes zugreifen kann
-        val intent = Intent(getActivity(), EditTask::class.java)
-        intent.putExtra("obID", objectId)
-        intent.putExtra("tDesc", taskDesc)
-        startActivity(intent)
-    }
-
-    interface TaskRowListener {
-
-        fun onTaskChange(objectId: String, isDone: Boolean)
-        fun onTaskDelete(objectId: String)
-        fun onTaskEdit(objectId: String, taskDesc:String)
-
-    }
-
-
 
 }
 

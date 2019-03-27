@@ -77,7 +77,7 @@ class register : AppCompatActivity() {
                     val user = mAuth.currentUser
                     val uid = user!!.uid
                     mDatabase.child(uid).child("Name").setValue(name)
-                    startActivity(Intent(this, ToDoActivity::class.java))
+                    startActivity(Intent(this, MainTest::class.java))
                     //Toast.makeText(this, "Successfully registered :)", Toast.LENGTH_LONG).show()
                     uploadImageToFirebaseStorage()
                 }else {

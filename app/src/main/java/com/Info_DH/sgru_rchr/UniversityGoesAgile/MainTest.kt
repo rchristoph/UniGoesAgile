@@ -13,7 +13,7 @@ import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_todo.*
 import kotlinx.android.synthetic.main.content_main.*
 
-class ToDoActivity : FragmentActivity() {
+class MainTest : TaskRowListener, AppCompatActivity()   {
 
     lateinit var _db: DatabaseReference
     lateinit var _dbuser: DatabaseReference
@@ -159,7 +159,24 @@ class ToDoActivity : FragmentActivity() {
     }
 
 
+    override fun onTaskChange(objectId: String, isDone: Boolean) {
+        //val task = _db.child(Statics.FIREBASE_TASK).child(objectId)
+        val task = _dbprojekt.child(projektIdent).child("tasks").child("task").child(objectId)
+        task.child("done").setValue(isDone)
+    }
 
-
+    override fun onTaskDelete(objectId: String) {
+        // val task = _db.child(Statics.FIREBASE_TASK).child(objectId)
+        val task = _dbprojekt.child(projektIdent).child("tasks").child("task").child(objectId)
+        task.removeValue()
+        println("Das ist ist task: $task")
+    }
+    override fun onTaskEdit(objectId: String, taskDesc: String) {
+        //hier nehme ich die Task-ID, von der aus ich in der naechsten Activity direkt auf die Childnodes zugreifen kann
+        val intent = Intent(this, EditTask::class.java)
+        intent.putExtra("obID", objectId)
+        intent.putExtra("tDesc", taskDesc)
+        startActivity(intent)
+    }
 
 }

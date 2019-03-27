@@ -68,7 +68,7 @@ class ChooseProject : AppCompatActivity() {
         val user = mAuth.currentUser
         val uid = user!!.uid
         mDatabase.child(uid).child("ProjektId").setValue(projectID.text.toString())
-        startActivity(Intent(this, ToDoActivity::class.java))
+        startActivity(Intent(this, MainTest::class.java))
 
     }
     // Funktion wenn der Create Button gedrückt wird
@@ -90,7 +90,7 @@ class ChooseProject : AppCompatActivity() {
         _db.child(project.objectId.toString()).child("tasks").child("task").setValue("")
 
         Toast.makeText(this, "New Project created successfully " + project.objectId, Toast.LENGTH_SHORT).show()
-        startActivity(Intent(this, ToDoActivity::class.java))
+        startActivity(Intent(this, MainTest::class.java))
 
     }
 

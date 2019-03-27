@@ -1,6 +1,7 @@
 package com.Info_DH.sgru_rchr.UniversityGoesAgile
 
 //import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.support.v4.content.ContextCompat.startActivity
 import android.view.LayoutInflater
@@ -12,11 +13,11 @@ import android.support.v4.app.Fragment
 import com.google.firebase.database.snapshot.EmptyNode
 
 
-class TaskAdapter(context: Context, taskList: MutableList<Task>) : BaseAdapter() {
+class TaskAdapter(val frag: Fragment, context: Context, taskList: MutableList<Task>) : BaseAdapter() {
 
     private val _inflater: LayoutInflater = LayoutInflater.from(context)
     private var _taskList = taskList
-     var _rowListener: TaskRowListener = context as TaskRowListener
+     var _rowListener: com.Info_DH.sgru_rchr.UniversityGoesAgile.TaskRowListener = frag as com.Info_DH.sgru_rchr.UniversityGoesAgile.TaskRowListener
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
