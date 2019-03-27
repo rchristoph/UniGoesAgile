@@ -17,4 +17,13 @@
         <item>Meerkatze</item>
         <item>Wolf</item>
     </string-array>
+
+    <string-array name="stage_arrays">
+        <item>Anzahl</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
 </resources>

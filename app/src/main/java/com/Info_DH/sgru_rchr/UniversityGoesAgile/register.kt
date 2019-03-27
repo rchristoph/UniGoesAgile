@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_register.*
-import kotlinx.android.synthetic.main.task_rows.*
+
 import java.util.*
 
 class register : AppCompatActivity() {

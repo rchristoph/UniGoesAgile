@@ -7,6 +7,6 @@ class Project{
 
     var objectId: String? = null
     var projectName: String? = null
-    var DeadLine: String? = null
+    var deadLine: String? = null
 
 }

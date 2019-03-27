@@ -44,7 +44,6 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         println("Die uid ist: $uid")
 
 
-
         var _taskListener = object : ValueEventListener {
             //Firebase delivers its data as a dataSnapshot
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -97,43 +96,6 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-
-        menuInflater.inflate(R.menu.menu_main, menu)
-
-        val shareItem = menu!!.findItem(R.id.menu_item_share)
-
-        shareActionProvider = MenuItemCompat.getActionProvider(shareItem) as ShareActionProvider
-
-        setShareIntent()
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item!!.itemId == R.id.signOut)
-        {
-            mAuth.signOut()
-            startActivity(Intent(this, LoginActivity::class.java))
-            Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show()
-        }
-        else if (item!!.itemId == R.id.signoutofproject){
-            startActivity(Intent(this, ChooseProject::class.java))
-
-        }
-        else if (item!!.itemId == R.id.menu_item_share){
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    //Funktion für das TEilen der Prokekt ID
-    private fun setShareIntent() {
-
-        val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.type = "text/plain"
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Projekt ID: ")
-        shareIntent.putExtra(Intent.EXTRA_TEXT, projektIdent)
-        shareActionProvider?.setShareIntent(shareIntent)
-    }
 
     fun showFooter(){
         footer.visibility = View.VISIBLE
@@ -271,6 +233,44 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
         stelle.setValue(nickWert)
     }
 
+    //Menu
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        menuInflater.inflate(R.menu.menu_main, menu)
+
+        val shareItem = menu!!.findItem(R.id.menu_item_share)
+
+        shareActionProvider = MenuItemCompat.getActionProvider(shareItem) as ShareActionProvider
+
+        setShareIntent()
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if(item!!.itemId == R.id.signOut)
+        {
+            mAuth.signOut()
+            startActivity(Intent(this, LoginActivity::class.java))
+            Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show()
+        }
+        else if (item!!.itemId == R.id.signoutofproject){
+            startActivity(Intent(this, ChooseProject::class.java))
+
+        }
+        else if (item!!.itemId == R.id.menu_item_share){
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    //Funktion für das TEilen der Prokekt ID
+    private fun setShareIntent() {
+
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "text/plain"
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Projekt ID: ")
+        shareIntent.putExtra(Intent.EXTRA_TEXT, projektIdent)
+        shareActionProvider?.setShareIntent(shareIntent)
+    }
 
     }
 

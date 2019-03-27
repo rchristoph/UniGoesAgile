@@ -1,5 +1,6 @@
 package com.Info_DH.sgru_rchr.UniversityGoesAgile
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -11,8 +12,10 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.android.synthetic.main.activity_choose_project.*
 import kotlinx.android.synthetic.main.activity_todo.*
 import kotlinx.android.synthetic.main.content_main.*
+import java.util.*
 
 class ChooseProject : AppCompatActivity() {
 
@@ -24,13 +27,29 @@ class ChooseProject : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-
         //Referenz zu der Firebase Datenbank wird in einer Variable gespeichert
         //Eine Referenz zu den Projekten und eine zu den Namen
         _db = FirebaseDatabase.getInstance().getReference("Projects")
         mDatabase = FirebaseDatabase.getInstance().getReference("Names")
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choose_project)
+
+        //Calendar
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+        datePicker.setOnClickListener {
+            val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener{view, mYear, mMonth, mDay ->
+
+                showDate.setText(""+ mDay +"/"+mMonth +"/"+ mYear)
+            }, year, month, day)
+
+            dpd.show()
+
+        }
 
         //Variablen für die Buttons werden erstellt
         val createButton = findViewById<View>(R.id.createBtn) as Button
@@ -76,6 +95,7 @@ class ChooseProject : AppCompatActivity() {
         val project = Project.create()
         val projectID = findViewById<View>(R.id.projectTxt) as TextView
         project.projectName = projectID.text.toString()
+        project.deadLine = showDate.text.toString()
         val newProject = _db.push()
         project.objectId = newProject.key
         //Set the values for new Project in firebase
@@ -87,10 +107,18 @@ class ChooseProject : AppCompatActivity() {
         val uid = user!!.uid
         mDatabase.child(uid).child("ProjektId").setValue(project.objectId)
         mDatabase.child(uid).child("ProjektName").setValue(project.projectName)
+        mDatabase.child(uid).child("Deadline").setValue(project.deadLine)
+
         _db.child(project.objectId.toString()).child("tasks").child("task").setValue("")
 
         Toast.makeText(this, "New Project created successfully " + project.objectId, Toast.LENGTH_SHORT).show()
-        startActivity(Intent(this, ToDoActivity::class.java))
+        //startActivity(Intent(this, ToDoActivity::class.java))
+
+        val intent = Intent(this@ChooseProject, setStages::class.java)
+        println("Das ist meine objectId:${project.objectId}")
+        intent.putExtra("projectID", project.objectId)
+        startActivity(intent)
+
 
     }
 
