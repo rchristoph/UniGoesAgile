@@ -13,7 +13,7 @@ import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_todo.*
 import kotlinx.android.synthetic.main.content_main.*
 
-class MainTest : FragmentActivity() {
+class ToDoActivity : FragmentActivity() {
 
     lateinit var _db: DatabaseReference
     lateinit var _dbuser: DatabaseReference
@@ -23,17 +23,11 @@ class MainTest : FragmentActivity() {
     val uid = user!!.uid
     var projektIdent:String = ""
 
-
-
-
-    val Context.myApp: MainTest
-        get() = applicationContext as MainTest
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_test)
+
+
 
         if (savedInstanceState == null) {
             supportFragmentManager

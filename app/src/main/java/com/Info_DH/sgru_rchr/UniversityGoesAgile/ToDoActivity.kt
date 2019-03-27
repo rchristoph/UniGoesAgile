@@ -18,7 +18,7 @@ import android.support.v7.widget.ShareActionProvider
 
 
 
-class ToDoActivity : AppCompatActivity(), TaskRowListener {
+class ToDoActivityX : AppCompatActivity(), TaskRowListener {
 
     lateinit var _db: DatabaseReference
     lateinit var _dbuser: DatabaseReference
@@ -74,7 +74,12 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
 
         _taskList = mutableListOf<Task>()
 
+
         _adapter = TaskAdapter(this, _taskList!!)
+        println("This is this: $this")
+        println("This is tasklist: $_taskList")
+        println("This is adapter: $_adapter")
+
          listviewTask!!.setAdapter(_adapter)
 
 
@@ -223,7 +228,7 @@ class ToDoActivity : AppCompatActivity(), TaskRowListener {
     }
     override fun onTaskEdit(objectId: String, taskDesc: String) {
         //hier nehme ich die Task-ID, von der aus ich in der naechsten Activity direkt auf die Childnodes zugreifen kann
-        val intent = Intent(this@ToDoActivity, EditTask::class.java)
+        val intent = Intent(this, EditTask::class.java)
         intent.putExtra("obID", objectId)
         intent.putExtra("tDesc", taskDesc)
         startActivity(intent)

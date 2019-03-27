@@ -16,7 +16,7 @@ class TaskAdapter(context: Context, taskList: MutableList<Task>) : BaseAdapter()
 
     private val _inflater: LayoutInflater = LayoutInflater.from(context)
     private var _taskList = taskList
-    private var _rowListener: TaskRowListener = context as TaskRowListener
+     var _rowListener: TaskRowListener = context as TaskRowListener
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 

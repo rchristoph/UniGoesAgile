@@ -17,6 +17,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_todo.*
 import kotlinx.android.synthetic.main.content_main.*
+import android.app.Activity
+
+
 
 
 
@@ -59,11 +62,38 @@ class Todofragment : Fragment(), TaskRowListener {
     }
 
 
-    override fun onAttach(context: Context) {
+    override fun onAttach(context: Context?) {
         super.onAttach(context)
-        //   listener = context as? OnArticleSelectedListener
 
-        println("This is getactivitiy in onattach $activity")
+        val a: Activity
+
+        if (context is Activity) {
+            a = context
+        }
+
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        _taskList = mutableListOf<Task>()
+
+        println("This is the context: ${getActivity()}")
+        println("This is this: $this")
+        println("This is tasklist: $_taskList")
+//        println("This is adapter: $_adapter")
+
+
+
+        _adapter = TaskAdapter(activity, _taskList!!)
+
+
+
+
+        listviewTask!!.setAdapter(_adapter)
+
+
 
 
     }
@@ -143,21 +173,19 @@ class Todofragment : Fragment(), TaskRowListener {
 
 
 
-        _taskList = mutableListOf<Task>()
-        println("This is the context: ${getActivity()}")
 
-
-
-
-
-        _adapter = TaskAdapter(activity, _taskList!!)
-        listviewTask!!.setAdapter(_adapter)
 
 
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_todofragment, container, false)
     }
+
+
+
+
+
+
 
 
 
