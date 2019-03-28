@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         if (user != null) {
-            startActivity(Intent(this, ToDoActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
         } else {
             val loginBtn = findViewById<View>(R.id.loginBtn) as Button
             val registerTxt = findViewById<View>(R.id.regTxt) as TextView
@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
             this.mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener ( this, OnCompleteListener<AuthResult> { task ->
                 if (task.isSuccessful) {
                     
-                    startActivity(Intent(this, ToDoActivity::class.java))
+                    startActivity(Intent(this, MainActivity::class.java))
                     Toast.makeText(this, "Successfully Logged in :)", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(this, "Error Logging in :(", Toast.LENGTH_SHORT).show()

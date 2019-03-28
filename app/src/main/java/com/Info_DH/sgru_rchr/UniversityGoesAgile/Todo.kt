@@ -1,26 +1,39 @@
-/*
 package com.Info_DH.sgru_rchr.UniversityGoesAgile
 
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.support.v4.view.MenuItemCompat
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.app.Fragment
+import android.support.v7.widget.ShareActionProvider
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ListView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_todo.*
 import kotlinx.android.synthetic.main.content_main.*
-import com.google.firebase.database.*
-import android.support.v7.widget.ShareActionProvider
-import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.task_rows.*
 
 
-class ToDoActivity : AppCompatActivity() {
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
 
+/**
+ * A simple [Fragment] subclass.
+ * Activities that contain this fragment must implement the
+ * [Todo.OnFragmentInteractionListener] interface
+ * to handle interaction events.
+ * Use the [Todo.newInstance] factory method to
+ * create an instance of this fragment.
+ *
+ */
+class Todo : Fragment() {
+    // TODO: Rename and change types of parameters
     lateinit var _dbuser: DatabaseReference
     lateinit var _dbprojekt: DatabaseReference
     val mAuth = FirebaseAuth.getInstance()
@@ -32,13 +45,19 @@ class ToDoActivity : AppCompatActivity() {
     var _taskList: MutableList<Task>? = null
     var nameIdent : String = ""
     var nickWert2: String  = ""
-
-
+    private var listener: OnFragmentInteractionListener? = null
     lateinit var _adapter: TaskAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_todo)
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
         _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
         _dbuser = FirebaseDatabase.getInstance().getReference("Names")
 
@@ -51,8 +70,8 @@ class ToDoActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 println("Datasnapshot: ${dataSnapshot.child("tasks")}")
                 loadTaskList(dataSnapshot.child("tasks"))
-                toolbar.setTitle(dataSnapshot.child("projectName").value.toString())
-                setSupportActionBar(toolbar)
+           //     toolbar.setTitle(dataSnapshot.child("projectName").value.toString())
+            //    setSupportActionBar(toolbar)
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // Getting Item failed, log a message
@@ -77,100 +96,33 @@ class ToDoActivity : AppCompatActivity() {
         }
 
         _taskList = mutableListOf<Task>()
-        _adapter = TaskAdapter(this, _taskList!!)
+        _adapter = TaskAdapter(context, _taskList!!)
 
-         listviewTask!!.setAdapter(_adapter)
+        println("Der Adapter ist: $_adapter")
+
+     //   val mylistview = view!!.findViewById<ListView>(R.id.listviewTask)
 
 
-        fab.setOnClickListener {view ->
-            showFooter()
-        }
 
-        btnAdd.setOnClickListener{ view ->
-            addTask()
-        }
+
+
 
         //_db.orderByKey().addValueEventListener(_taskListener)
         _dbuser.child(uid).child("ProjektId").addValueEventListener(_projectListener)
         println("Die Projektident nr ist diese hier: $projektIdent")
         println("das ist _dbproject: $_taskListener")
 
+
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_todo, container, false)
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-
-        menuInflater.inflate(R.menu.menu_main, menu)
-
-        val shareItem = menu!!.findItem(R.id.menu_item_share)
-
-        shareActionProvider = MenuItemCompat.getActionProvider(shareItem) as ShareActionProvider
-
-        setShareIntent()
-        return super.onCreateOptionsMenu(menu)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        listviewTask!!.setAdapter(_adapter)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item!!.itemId == R.id.signOut)
-        {
-            mAuth.signOut()
-            startActivity(Intent(this, LoginActivity::class.java))
-            Toast.makeText(this, "Logged out", Toast.LENGTH_LONG).show()
-        }
-        else if (item!!.itemId == R.id.signoutofproject){
-            startActivity(Intent(this, ChooseProject::class.java))
 
-        }
-        else if (item!!.itemId == R.id.menu_item_share){
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    //Funktion für das TEilen der Prokekt ID
-    private fun setShareIntent() {
-
-        val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.type = "text/plain"
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Projekt ID: ")
-        shareIntent.putExtra(Intent.EXTRA_TEXT, projektIdent)
-        shareActionProvider?.setShareIntent(shareIntent)
-    }
-
-    fun showFooter(){
-        footer.visibility = View.VISIBLE
-        fab.visibility = View.GONE
-    }
-
-    fun addTask(){
-
-        //Declare and Initialise the Task
-        val task = Task.create()
-
-        //Set Task Description and isDone Status
-        task.taskDesc = txtNewTaskDesc.text.toString()
-        task.done = false
-        task.author = user!!.uid
-        task.edit = ""
-        task.assignee = "leer"
-
-        //Get the object id for the new task from the Firebase Database
-        //Neue Tasks werden als Children von dem Projekt angelegt, dem der/die User_in zugewiesen ist.
-        val newTask = _dbprojekt.child(projektIdent).child("tasks").child("task").push()
-
-        task.objectId = newTask.key
-
-        //Set the values for new task in the firebase using the footer form
-        newTask.setValue(task)
-
-        //Hide the footer and show the floating button
-        footer.visibility = View.GONE
-        fab.visibility = View.VISIBLE
-
-        //Reset the new task description field for reuse.
-        txtNewTaskDesc.setText("")
-
-        Toast.makeText(this, "New Task added to the List successfully" + task.objectId, Toast.LENGTH_SHORT).show()
-    }
     private fun loadTaskList(dataSnapshot: DataSnapshot) {
         Log.d("ToDoActivity", "loadTaskList")
 
@@ -210,15 +162,53 @@ class ToDoActivity : AppCompatActivity() {
         _adapter.notifyDataSetChanged()
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+    // TODO: Rename method, update argument and hook method into UI event
+    fun onButtonPressed(uri: Uri) {
+        listener?.onFragmentInteraction(uri)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+       /* if (context is OnFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+        }*/
+    }
+
     private fun startChoose(){
         println("Wir sind in der richtigen Funktion")
-        startActivity(Intent(this, ChooseProject::class.java))
-        Toast.makeText(this, "Choose Project", Toast.LENGTH_LONG).show()
+        startActivity(Intent(context, ChooseProject::class.java))
+        Toast.makeText(context, "Choose Project", Toast.LENGTH_LONG).show()
     }
 
 
-
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     *
+     *
+     * See the Android Training lesson [Communicating with Other Fragments]
+     * (http://developer.android.com/training/basics/fragments/communicating.html)
+     * for more information.
+     */
+    interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        fun onFragmentInteraction(uri: Uri)
     }
 
-
-*/
+}
