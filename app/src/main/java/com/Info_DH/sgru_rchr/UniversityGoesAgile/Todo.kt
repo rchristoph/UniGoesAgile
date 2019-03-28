@@ -14,7 +14,7 @@ import android.widget.ListView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.activity_todo.*
+
 import kotlinx.android.synthetic.main.content_main.*
 
 
@@ -47,6 +47,27 @@ class Todo : Fragment() {
     var nickWert2: String  = ""
     private var listener: OnFragmentInteractionListener? = null
     lateinit var _adapter: TaskAdapter
+
+
+    companion object {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private val ARG_SECTION_NUMBER = "section_number"
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        fun newInstance(sectionNumber: Int): Todo {
+            val fragment = Todo()
+            val args = Bundle()
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber)
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

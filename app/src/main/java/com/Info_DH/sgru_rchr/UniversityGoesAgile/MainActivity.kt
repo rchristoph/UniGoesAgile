@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_todo.*
+
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
 
@@ -59,33 +59,19 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
         container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        fab!!.setOnClickListener { view ->
+
+            showFooter()
+
+            /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()*/
+        }
+
+        btnAdd!!.setOnClickListener{ view ->
+            addTask()
         }
 
     }
-
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_tabs, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-
-        if (id == R.id.action_settings) {
-            return true
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
 
     /**
      * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -96,7 +82,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
         override fun getItem(position: Int): Fragment {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1)
+            return Todo.newInstance(position + 1)
         }
 
         override fun getCount(): Int {
@@ -105,40 +91,6 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
         }
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    class PlaceholderFragment : Fragment() {
-
-        override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View? {
-            val rootView = inflater.inflate(R.layout.fragment_main, container, false)
-            rootView.section_label.text = getString(R.string.section_format, arguments?.getInt(ARG_SECTION_NUMBER))
-            return rootView
-        }
-
-        companion object {
-            /**
-             * The fragment argument representing the section number for this
-             * fragment.
-             */
-            private val ARG_SECTION_NUMBER = "section_number"
-
-            /**
-             * Returns a new instance of this fragment for the given section
-             * number.
-             */
-            fun newInstance(sectionNumber: Int): Todo {
-                val fragment = Todo()
-                val args = Bundle()
-                args.putInt(ARG_SECTION_NUMBER, sectionNumber)
-                fragment.arguments = args
-                return fragment
-            }
-        }
-    }
     override fun onTaskChange(objectId: String, isDone: Boolean) {
         //val task = _db.child(Statics.FIREBASE_TASK).child(objectId)
         val task = _dbprojekt.child(projektIdent).child("tasks").child("task").child(objectId)
@@ -194,7 +146,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
         var stelle = _dbprojekt.child(projektIdent).child("tasks/task").child(objectId).child("assignee")
         stelle.setValue(nickWert)
     }
-    /*override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.menu_main, menu)
 
@@ -204,9 +156,10 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
 
         setShareIntent()
         return super.onCreateOptionsMenu(menu)
-    }*/
+    }
 
-   /* override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if(item!!.itemId == R.id.signOut)
         {
             mAuth.signOut()
@@ -219,8 +172,11 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
         }
         else if (item!!.itemId == R.id.menu_item_share){
         }
+        else if (item!!.itemId == R.id.action_settings) {
+            return true
+        }
         return super.onOptionsItemSelected(item)
-    }*/
+    }
 
     //Funktion für das TEilen der Prokekt ID
     private fun setShareIntent() {
@@ -267,8 +223,5 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
 
         Toast.makeText(this, "New Task added to the List successfully" + task.objectId, Toast.LENGTH_SHORT).show()
     }
-
-
-
 
 }
