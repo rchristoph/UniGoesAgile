@@ -41,12 +41,17 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
     var nameIdent : String = ""
     var nickWert2: String  = ""
 
+    lateinit var _adapter: TaskAdapter
+
 
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
+        _dbuser = FirebaseDatabase.getInstance().getReference("Names")
 
         setSupportActionBar(toolbar)
         // Create the adapter that will return a fragment for each of the three
@@ -63,13 +68,15 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
 
             showFooter()
 
-            /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()*/
-        }
+        /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+            .setAction("Action", null).show()*/
+    }
 
         btnAdd!!.setOnClickListener{ view ->
             addTask()
         }
+
+
 
     }
 
@@ -109,7 +116,6 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
         intent.putExtra("obID", objectId)
         intent.putExtra("tDesc", taskDesc)
         startActivity(intent)
-
     }
 
     override fun onTaskAssign(objectId: String) {

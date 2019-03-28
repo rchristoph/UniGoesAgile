@@ -19,7 +19,7 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.task_rows.*
 
 
-class ToDoActivity : AppCompatActivity() {
+class ToDoActivity : AppCompatActivity(), TaskRowListener {
 
     lateinit var _dbuser: DatabaseReference
     lateinit var _dbprojekt: DatabaseReference
@@ -79,7 +79,7 @@ class ToDoActivity : AppCompatActivity() {
         _taskList = mutableListOf<Task>()
         _adapter = TaskAdapter(this, _taskList!!)
 
-         listviewTask!!.setAdapter(_adapter)
+        listviewTask!!.setAdapter(_adapter)
 
 
         fab.setOnClickListener {view ->
@@ -216,9 +216,62 @@ class ToDoActivity : AppCompatActivity() {
         Toast.makeText(this, "Choose Project", Toast.LENGTH_LONG).show()
     }
 
+    override fun onTaskChange(objectId: String, isDone: Boolean) {
+        //val task = _db.child(Statics.FIREBASE_TASK).child(objectId)
+        val task = _dbprojekt.child(projektIdent).child("tasks").child("task").child(objectId)
+        task.child("done").setValue(isDone)
+    }
 
+    override fun onTaskDelete(objectId: String) {
+        // val task = _db.child(Statics.FIREBASE_TASK).child(objectId)
+        val task = _dbprojekt.child(projektIdent).child("tasks").child("task").child(objectId)
+        task.removeValue()
+        println("Das ist ist task: $task")
+    }
+    override fun onTaskEdit(objectId: String, taskDesc: String) {
+        //hier nehme ich die Task-ID, von der aus ich in der naechsten Activity direkt auf die Childnodes zugreifen kann
+        val intent = Intent(this@ToDoActivity, EditTask::class.java)
+        intent.putExtra("obID", objectId)
+        intent.putExtra("tDesc", taskDesc)
+        startActivity(intent)
 
     }
 
+    override fun onTaskAssign(objectId: String) {
+        _dbuser = FirebaseDatabase.getInstance().getReference("Names").child(uid)
+        if (nickWert2.isEmpty()) {
 
+            var _nameListener = object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    println("Der  Wert ist: ${snapshot.value}")
+                    nameIdent = snapshot.value.toString()
+                    println("Die Name ident vorm Funktionsstart ist: $nameIdent")
+                    println("Meine uid ist: $uid")
+                    var nickWert = snapshot.child("nickName")
+                    var nickWert2 = nickWert.getValue().toString()
+                    println("NICKWERT:$nickWert")
+                    zsFassung(nickWert2, objectId)
+
+                }
+
+            }
+
+            _dbuser.child(nameIdent).addValueEventListener(_nameListener)
+        } else {
+            zsFassung(nickWert2, objectId)
+        }
+    }
+
+    private fun zsFassung (nickWert:String, objectId: String) {
+
+        var stelle = _dbprojekt.child(projektIdent).child("tasks/task").child(objectId).child("assignee")
+        stelle.setValue(nickWert)
+    }
+
+
+}
 */

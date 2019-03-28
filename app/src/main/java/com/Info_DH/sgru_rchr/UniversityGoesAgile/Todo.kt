@@ -79,6 +79,11 @@ class Todo : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+
+
+
+
+
         _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
         _dbuser = FirebaseDatabase.getInstance().getReference("Names")
 
@@ -120,12 +125,6 @@ class Todo : Fragment() {
         _adapter = TaskAdapter(context, _taskList!!)
 
         println("Der Adapter ist: $_adapter")
-
-     //   val mylistview = view!!.findViewById<ListView>(R.id.listviewTask)
-
-
-
-
 
 
         //_db.orderByKey().addValueEventListener(_taskListener)
