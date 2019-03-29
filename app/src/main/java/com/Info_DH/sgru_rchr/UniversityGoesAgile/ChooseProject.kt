@@ -87,7 +87,7 @@ class ChooseProject : AppCompatActivity() {
         val user = mAuth.currentUser
         val uid = user!!.uid
         mDatabase.child(uid).child("ProjektId").setValue(projectID.text.toString())
-        startActivity(Intent(this, ToDoActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java))
 
     }
     // Funktion wenn der Create Button gedrückt wird
