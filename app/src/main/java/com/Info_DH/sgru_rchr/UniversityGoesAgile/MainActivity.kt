@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
                 println("Die Projektident vorm Funktionsstart ist: $projektIdent")
                 println("Meine uid ist: $uid")
                 if (snapshot.value == null){
-                //    startChoose()
+                    startChoose()
                 }
               //  _dbprojekt.child(projektIdent).orderByKey().addValueEventListener(_taskListener)
             }
@@ -215,9 +215,12 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
         shareActionProvider?.setShareIntent(shareIntent)
     }
 
-    fun showFooter(){
-        footer.visibility = View.VISIBLE
-        fab.visibility = View.GONE
+
+
+    private fun startChoose(){
+        println("Wir sind in der richtigen Funktion")
+        startActivity(Intent(this, ChooseProject::class.java))
+        Toast.makeText(this, "Choose Project", Toast.LENGTH_LONG).show()
     }
 
 

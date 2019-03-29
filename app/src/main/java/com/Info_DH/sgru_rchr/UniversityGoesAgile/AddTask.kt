@@ -17,21 +17,16 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class AddTask : android.support.v4.app.DialogFragment() {
     companion object {
-        private const val TAG = "EditTextDialog"
-
         private const val EXTRA_TITLE = "title"
         private const val EXTRA_HINT = "hint"
-        private const val EXTRA_MULTILINE = "multiline"
-        private const val EXTRA_TEXT = "text"
+
 
 
         fun newInstance(title: String? = null, hint: String? = null): AddTask {
             val dialog = AddTask()
              val args = Bundle().apply {
                putString(EXTRA_TITLE, title)
-                putString(EXTRA_HINT, hint)
-            /*    putString(EXTRA_TEXT, text)
-                putBoolean(EXTRA_MULTILINE, isMultiline)*/
+                 putString(EXTRA_HINT, hint)
             }
             dialog.arguments = args
             return dialog
@@ -40,7 +35,6 @@ class AddTask : android.support.v4.app.DialogFragment() {
 
     lateinit var _dbuser: DatabaseReference
     lateinit var _dbprojekt: DatabaseReference
-    val mAuth = FirebaseAuth.getInstance()
     val user = FirebaseAuth.getInstance().currentUser
     var projektIdent:String = ""
     val uid = user!!.uid
@@ -52,8 +46,7 @@ class AddTask : android.support.v4.app.DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val title = arguments?.getString(EXTRA_TITLE)
         val hint = arguments?.getString(EXTRA_HINT)
-/*        val text: String? = arguments?.getString(EXTRA_TEXT)
-        val isMiltiline = arguments?.getBoolean(EXTRA_MULTILINE) ?: false*/
+
 
         _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
         _dbuser = FirebaseDatabase.getInstance().getReference("Names")
@@ -82,15 +75,6 @@ class AddTask : android.support.v4.app.DialogFragment() {
         editText = view.findViewById(R.id.editText)
         editText.hint = hint
 
-/*        if (isMiltiline) {
-            editText.minLines = 3
-            editText.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-        }
-        if (text != null) {
-            // editText.setText(text)
-            // editText.setSelection(text.length)
-            editText.append(text)
-        }*/
 
         val builder = AlertDialog.Builder(activity!!)
             .setTitle(title)
@@ -132,10 +116,5 @@ class AddTask : android.support.v4.app.DialogFragment() {
 
         Toast.makeText(context, "New Task added to the List successfully" + task.objectId, Toast.LENGTH_SHORT).show()
     }
-
-
-
-
-
 
 }

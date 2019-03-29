@@ -79,7 +79,7 @@ class Todo : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-
+            println("die Sektionsnummer ist: ${arguments.get("section_number")} ")
 
 
 
@@ -114,9 +114,6 @@ class Todo : Fragment() {
                 projektIdent = snapshot.value.toString()
                 println("Die Projektident vorm Funktionsstart ist: $projektIdent")
                 println("Meine uid ist: $uid")
-                if (snapshot.value == null){
-                    startChoose()
-                }
                 _dbprojekt.child(projektIdent).orderByKey().addValueEventListener(_taskListener)
             }
         }
@@ -152,7 +149,6 @@ class Todo : Fragment() {
         //Check if current database contains any collection
         if (tasks.hasNext()) {
 
-
             _taskList!!.clear()
 
 
@@ -161,6 +157,7 @@ class Todo : Fragment() {
 
             //check if the collection has any task or not
             while (itemsIterator.hasNext()) {
+
 
                 //get current task
                 val currentItem = itemsIterator.next()
@@ -176,7 +173,21 @@ class Todo : Fragment() {
                 task.assignee = map.get("assignee") as String?
 
                 //task.edit = map.get("edit") as String?
-                _taskList!!.add(task)
+                if(arguments.get("section_number")== 1) {
+                    if (task.assignee == "leer"&&task.done == false) {
+                        _taskList!!.add(task)
+                    }
+                }
+                else if(arguments.get("section_number")== 2) {
+                    if (task.assignee != "leer"&& task.done == false) {
+                        _taskList!!.add(task)
+                    }
+                }
+                else if(arguments.get("section_number")== 3) {
+                    if (task.done == true) {
+                        _taskList!!.add(task)
+                    }
+                }
             }
         }
         //alert adapter that has changed
@@ -185,11 +196,7 @@ class Todo : Fragment() {
 
 
 
-    private fun startChoose(){
-        println("Wir sind in der richtigen Funktion")
-        startActivity(Intent(context, ChooseProject::class.java))
-        Toast.makeText(context, "Choose Project", Toast.LENGTH_LONG).show()
-    }
+
 
 
     /**
