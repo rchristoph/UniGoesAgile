@@ -152,6 +152,7 @@ class Todo : Fragment() {
         //Check if current database contains any collection
         if (tasks.hasNext()) {
 
+
             _taskList!!.clear()
 
 
@@ -184,30 +185,6 @@ class Todo : Fragment() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-       /* if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
-        }*/
-    }
-
     private fun startChoose(){
         println("Wir sind in der richtigen Funktion")
         startActivity(Intent(context, ChooseProject::class.java))
@@ -230,5 +207,8 @@ class Todo : Fragment() {
         // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
     }
+
+
+
 
 }

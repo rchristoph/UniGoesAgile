@@ -20,6 +20,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import android.app.AlertDialog
+import android.app.Dialog
+import android.app.DialogFragment
 
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -66,17 +69,35 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
 
         fab!!.setOnClickListener { view ->
 
-            showFooter()
+            val dialog = AddTask.newInstance(title= "Neue Aufgabe hinzufügen", hint = "Name der Aufgabe")
+            dialog.show(supportFragmentManager, "editDescription")
 
-        /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-            .setAction("Action", null).show()*/
+
+           // showFooter()
+
     }
 
-        btnAdd!!.setOnClickListener{ view ->
+    /*    btnAdd!!.setOnClickListener{ view ->
             addTask()
+        }*/
+
+        var _projectListener = object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+            override fun onDataChange(snapshot: DataSnapshot) {
+                println("Der  Wert ist: ${snapshot.value}")
+                projektIdent = snapshot.value.toString()
+                println("Die Projektident vorm Funktionsstart ist: $projektIdent")
+                println("Meine uid ist: $uid")
+                if (snapshot.value == null){
+                //    startChoose()
+                }
+              //  _dbprojekt.child(projektIdent).orderByKey().addValueEventListener(_taskListener)
+            }
         }
 
-
+        _dbuser.child(uid).child("ProjektId").addValueEventListener(_projectListener)
 
     }
 
@@ -199,35 +220,6 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
         fab.visibility = View.GONE
     }
 
-    fun addTask(){
 
-        //Declare and Initialise the Task
-        val task = Task.create()
-
-        //Set Task Description and isDone Status
-        task.taskDesc = txtNewTaskDesc.text.toString()
-        task.done = false
-        task.author = user!!.uid
-        task.edit = ""
-        task.assignee = "leer"
-
-        //Get the object id for the new task from the Firebase Database
-        //Neue Tasks werden als Children von dem Projekt angelegt, dem der/die User_in zugewiesen ist.
-        val newTask = _dbprojekt.child(projektIdent).child("tasks").child("task").push()
-
-        task.objectId = newTask.key
-
-        //Set the values for new task in the firebase using the footer form
-        newTask.setValue(task)
-
-        //Hide the footer and show the floating button
-        footer.visibility = View.GONE
-        fab.visibility = View.VISIBLE
-
-        //Reset the new task description field for reuse.
-        txtNewTaskDesc.setText("")
-
-        Toast.makeText(this, "New Task added to the List successfully" + task.objectId, Toast.LENGTH_SHORT).show()
-    }
 
 }
