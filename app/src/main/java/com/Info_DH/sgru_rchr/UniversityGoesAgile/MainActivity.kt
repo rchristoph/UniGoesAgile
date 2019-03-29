@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
         _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
         _dbuser = FirebaseDatabase.getInstance().getReference("Names")
 
-        setSupportActionBar(toolbar)
+       // setSupportActionBar(toolbar)
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
@@ -80,6 +80,19 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
     /*    btnAdd!!.setOnClickListener{ view ->
             addTask()
         }*/
+        var _taskListener = object : ValueEventListener {
+            //Firebase delivers its data as a dataSnapshot
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                println("Datasnapshot: ${dataSnapshot.child("tasks")}")
+              //  loadTaskList(dataSnapshot.child("tasks"))
+                toolbar.setTitle(dataSnapshot.child("projectName").value.toString())
+                setSupportActionBar(toolbar)
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Getting Item failed, log a message
+                //Log.w("ToDoActivity", "loadItem:onCancelled", databaseError.toException())
+            }
+        }
 
         var _projectListener = object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -93,7 +106,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener {
                 if (snapshot.value == null){
                     startChoose()
                 }
-              //  _dbprojekt.child(projektIdent).orderByKey().addValueEventListener(_taskListener)
+                _dbprojekt.child(projektIdent).orderByKey().addValueEventListener(_taskListener)
             }
         }
 
