@@ -3,8 +3,6 @@ package com.Info_DH.sgru_rchr.UniversityGoesAgile
 import android.app.DatePickerDialog
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -20,10 +18,9 @@ class setStages : AppCompatActivity() {
     var mAuth = FirebaseAuth.getInstance()
     val user = mAuth.currentUser
     val uid = user!!.uid
-    lateinit var editStageName: EditText
-    lateinit var startDatum: TextView
-    lateinit var endDatum: TextView
-    lateinit var addBtn: Button
+    lateinit var stageName: EditText
+    lateinit var phasenBeginn: TextView
+    lateinit var phasenEnde: TextView
     val c = Calendar.getInstance()
     val year = c.get(Calendar.YEAR)
     val month = c.get(Calendar.MONTH)
@@ -33,7 +30,7 @@ class setStages : AppCompatActivity() {
 
     lateinit var stageList: MutableList<Stage>
     lateinit var ref: DatabaseReference
-
+    var stageId: String= ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,19 +43,19 @@ class setStages : AppCompatActivity() {
         stageList = mutableListOf()
         ref = FirebaseDatabase.getInstance().getReference("Projects").child(projectID)
 
-        editStageName = findViewById(R.id.editStage)
-        startDatum = findViewById(R.id.startDate)
-        endDatum = findViewById(R.id.endDate)
+        stageName = findViewById(R.id.editStage)
+        phasenBeginn = findViewById(R.id.showStart)
+        phasenEnde = findViewById(R.id.showEnd)
 
         listView = findViewById(R.id.LIstview)
 
 
         addStage.setOnClickListener {
-            saveStage(projectID)
+            saveStage()
 
 
         }
-
+//Calendar method
         startDate.setOnClickListener {
             val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDay ->
 
@@ -78,10 +75,16 @@ class setStages : AppCompatActivity() {
 
         }
 
+        //Datasnapshot
         var _stageListener = object : ValueEventListener {
 
-            override fun onDataChange(p0: DataSnapshot?) {
+            override fun onDataChange(p0: DataSnapshot) {
+
+              println("Das ist mein SnapshotNeu:${p0.children}")
+              println("Das sind meine Snapshots:${p0.child("Stages").value}")
                 if (p0!!.exists()) {
+                    stageList!!.clear()
+
                     for (h in p0.children) {
                         val stage = h.getValue(Stage::class.java)
                         stageList.add(stage!!)
@@ -97,32 +100,31 @@ class setStages : AppCompatActivity() {
             }
 
         }
-        ref.addValueEventListener(_stageListener)
+        ref.child("Stages").child("Stage").addValueEventListener(_stageListener)
 
     }
 
 
 
-    private fun saveStage(projectID:String) {
-        val stageName = editStageName.text.toString().trim()
-        val start = showStart.text.toString()
-        val ende = showEnd.text.toString()
+    private fun saveStage() {
+        val stageName = stageName.text.toString().trim()
+        val start = phasenBeginn.text.toString()
+        val ende = phasenEnde.text.toString()
 
 
-
-        if(stageName.isEmpty() && start.isEmpty() && ende.isEmpty()){
-            editStageName.error = "Please enter a stage and date"
+        if(stageName.isEmpty() ){//&& start.isEmpty() && ende.isEmpty()){
+           // stageName.error = "Please enter a stage and date"
             return
         }
 
-        val stageId = ref.push().key.toString()
+        val newValue = ref.child("Stages").child("Stage")
 
-        val stage = Stage(stageId, stageName, start, ende)
+        stageId = newValue.push().key.toString()
 
-        ref.child(stageId).setValue(stage)
+        val stage = Stage(stageName, start, ende, stageId)
+
+        newValue.child(stageId).setValue(stage)
 
         Toast.makeText(applicationContext, "StageSaved!", Toast.LENGTH_LONG).show()
     }
-
-
 }

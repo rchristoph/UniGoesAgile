@@ -1,14 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-             android:layout_height="match_parent">
-
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
     <TextView
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:text="TextViewName"
+            android:id="@+id/TextViewName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/TextViewName"
-            tools:layout_editor_absoluteY="0dp" tools:layout_editor_absoluteX="0dp"/>
-</LinearLayout>
+            android:layout_toEndOf="@+id/chkDone"
+            android:layout_toRightOf="@+id/chkDone"
+            android:text="Item Text"
+
+            android:fontFamily="@font/muli_extralight" android:textSize="18sp"/>
+    <TextView
+            android:text="11/11/1111"
+            android:layout_height="wrap_content" android:id="@+id/start1" android:layout_width="wrap_content"
+            android:layout_toEndOf="@+id/TextViewName" android:layout_marginStart="84dp"/>
+    <TextView
+            android:text="22/22/2222"
+            android:layout_width="87dp"
+            android:layout_height="wrap_content" android:id="@+id/end1" android:layout_alignParentEnd="true"
+            android:layout_marginEnd="25dp" android:layout_toEndOf="@+id/textView6" android:layout_marginStart="27dp"/>
+</RelativeLayout>

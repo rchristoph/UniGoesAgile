@@ -16,10 +16,15 @@ class StageAdapter(val mCtx: Context, val layoutResId: Int, val stageList: List<
         val view: View = layoutInflater.inflate(layoutResId, null)
 
         val textViewName = view.findViewById<TextView>(R.id.TextViewName)
+        val showStart1 = view.findViewById<TextView>(R.id.start1)
+        val showEnd1 = view.findViewById<TextView>(R.id.end1)
 
         val stage = stageList[position]
 
         textViewName.text = stage.stageName
+        showStart1.text = stage.phasenBeginn
+        showEnd1.text = stage.phasenEnde
+
 
         return view
     }
