@@ -22,8 +22,7 @@
             android:id="@+id/projektname"
             android:textAlignment="viewStart" android:textStyle="italic"
             android:textColor="@color/colorAccent"/>
-
-    <TextView
+<TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/nav_header_vertical_spacing"

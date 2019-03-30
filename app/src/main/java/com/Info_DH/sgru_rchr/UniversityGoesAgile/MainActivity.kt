@@ -13,6 +13,7 @@ import android.support.v7.widget.ShareActionProvider
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import android.support.v4.widget.DrawerLayout
 
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -21,6 +22,9 @@ import android.support.v7.widget.Toolbar
 import android.view.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_drawer.*
+import kotlinx.android.synthetic.main.app_bar_drawer.*
+import kotlinx.android.synthetic.main.content_drawer.*
+
 
 class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavigationItemSelectedListener {
 
@@ -51,11 +55,21 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
 
 
+
+
+
         _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
         _dbuser = FirebaseDatabase.getInstance().getReference("Names")
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        val toggle = ActionBarDrawerToggle(
+            this@MainActivity, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        )
+        drawer_layout.addDrawerListener(toggle)
+        toggle.syncState()
+        nav_view.setNavigationItemSelectedListener(this@MainActivity)
 
        // setSupportActionBar(toolbar)
         // Create the adapter that will return a fragment for each of the three
@@ -83,6 +97,14 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
               //  loadTaskList(dataSnapshot.child("tasks"))
                 toolbar.setTitle(dataSnapshot.child("projectName").value.toString())
                 setSupportActionBar(toolbar)
+                val toggle = ActionBarDrawerToggle(
+                    this@MainActivity, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+                )
+                drawer_layout.addDrawerListener(toggle)
+                toggle.syncState()
+                nav_view.setNavigationItemSelectedListener(this@MainActivity)
+
+
                 projektname.text = dataSnapshot.child("projectName").value.toString()
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -111,13 +133,18 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
         _dbuser.child(uid).addValueEventListener(_projectListener)
 
-        val toggle = ActionBarDrawerToggle(
-            this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
-        )
-        drawer_layout.addDrawerListener(toggle)
-        toggle.syncState()
 
-        nav_view.setNavigationItemSelectedListener(this)
+        // enabling Toolbar bar app icon and behaving it as toggle button
+
+
+
+
+
+
+
+
+
+
 
 
     }
@@ -298,4 +325,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
 
 
+
 }
+
+
