@@ -6,15 +6,12 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_choose_project.*
-import kotlinx.android.synthetic.main.activity_todo.*
-import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
 
 class ChooseProject : AppCompatActivity() {
@@ -34,6 +31,45 @@ class ChooseProject : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choose_project)
+
+        changeActivity.setOnClickListener {
+            textInputLayout4.visibility = View.GONE
+            joinBtn.visibility = View.GONE
+            changeActivity.visibility = View.GONE
+            changeActivity.visibility = View.GONE
+            joinProj.visibility = View.GONE
+
+
+            ddl.visibility = View.VISIBLE
+            joinExist.visibility = View.VISIBLE
+            projectTxt.visibility = View.VISIBLE
+            chooseProj.visibility = View.VISIBLE
+            createBtn.visibility = View.VISIBLE
+            showDate.visibility = View.VISIBLE
+            datePicker.visibility = View.VISIBLE
+            newtextview.visibility = View.VISIBLE
+
+        }
+
+        joinExist.setOnClickListener {
+            textInputLayout4.visibility = View.VISIBLE
+            joinBtn.visibility = View.VISIBLE
+            changeActivity.visibility = View.VISIBLE
+            changeActivity.visibility = View.VISIBLE
+            joinProj.visibility = View.VISIBLE
+
+
+            ddl.visibility = View.GONE
+            joinExist.visibility = View.GONE
+            projectTxt.visibility = View.GONE
+            chooseProj.visibility = View.GONE
+            createBtn.visibility = View.GONE
+            showDate.visibility = View.GONE
+            datePicker.visibility = View.GONE
+            newtextview.visibility = View.GONE
+
+
+        }
 
         //Calendar
         val c = Calendar.getInstance()

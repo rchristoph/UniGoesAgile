@@ -2,13 +2,11 @@ package com.Info_DH.sgru_rchr.UniversityGoesAgile
 
 import android.content.Intent
 import android.support.design.widget.TabLayout
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
 import android.os.Bundle
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.ShareActionProvider
@@ -103,7 +101,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                 println("Die Projektident vorm Funktionsstart ist: $projektIdent")
                 println("Meine uid ist: $uid")
                 username.text = "${snapshot.child("username").value.toString()}"
-                nickname.text = "${snapshot.child("nickName").value.toString()} (Nickname)"
+                newtextview.text = "${snapshot.child("nickName").value.toString()} (Nickname)"
                 if (snapshot.value == null){
                     startChoose()
                 }

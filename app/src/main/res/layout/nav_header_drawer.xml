@@ -21,7 +21,7 @@
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.ActionMode.Title.Inverse"
             android:id="@+id/projektname"
             android:textAlignment="viewStart" android:textStyle="italic"
-            android:textColor="@color/calendar_bg"/>
+            android:textColor="@color/colorAccent"/>
 
     <TextView
             android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/dein_nickname"
-            android:id="@+id/nickname" android:textSize="24sp" android:textColor="@android:color/white"
+            android:id="@+id/newtextview" android:textSize="24sp" android:textColor="@android:color/white"
             android:textStyle="bold"/>
 
 </LinearLayout>
