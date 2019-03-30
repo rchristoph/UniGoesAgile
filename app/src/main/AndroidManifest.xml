@@ -21,6 +21,7 @@
 <activity android:name=".AddTask">
         </activity>
         -->
+
         <activity
                 android:name=".MainActivity"
                 android:label="@string/title_activity_main"
@@ -39,13 +40,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!--
-<activity
-                android:name=".ToDoActivity"
-                android:label="UniversityGoesAgile"
-                android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        -->
+
         <activity android:name=".register">
         </activity>
 

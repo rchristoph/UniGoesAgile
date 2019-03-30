@@ -4,10 +4,10 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.Info_DH.sgru_rchr.UniversityGoesAgile.ToDoActivity">
-    <item android:id="@+id/action_settings"
+    <!--<item android:id="@+id/action_settings"
           android:title="@string/action_settings"
           android:orderInCategory="100"
-          app:showAsAction="never"/>
+          app:showAsAction="never"/>-->
     <item android:id="@+id/signoutofproject"
           android:title="Projekt wechseln"
           app:showAsAction="never"/>
