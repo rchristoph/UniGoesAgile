@@ -57,11 +57,21 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
 
 
+
+
+
         _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
         _dbuser = FirebaseDatabase.getInstance().getReference("Names")
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        val toggle = ActionBarDrawerToggle(
+            this@MainActivity, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        )
+        drawer_layout.addDrawerListener(toggle)
+        toggle.syncState()
+        nav_view.setNavigationItemSelectedListener(this@MainActivity)
 
        // setSupportActionBar(toolbar)
         // Create the adapter that will return a fragment for each of the three
