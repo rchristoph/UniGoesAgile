@@ -6,16 +6,24 @@
     <string name="title_activity_login">LoginActivity</string>
 
 
+    <string-array name="Themes">
+        <item>Städte</item>
+        <item>Tiere</item>
+        <item>Politik</item>
+        <item>Epochen</item>
+
+    </string-array>
     <string-array name="animal_arrays">
         <item>Wähle ein Tier</item>
-        <item>Ameisenbär</item>
+        <item>Bär</item>
         <item>Giraffe</item>
-        <item>Maulwurf</item>
+        <item>Eule</item>
         <item>Löwe</item>
         <item>Kranich</item>
         <item>Wiesel</item>
-        <item>Meerkatze</item>
+        <item>Okapi</item>
         <item>Wolf</item>
+        <item>Robbe</item>
     </string-array>
 
     <string-array name="stage_arrays">
@@ -57,15 +65,37 @@
             <item>Bangkok</item>
             <item>London</item>
             <item>Paris</item>
-            <item>Singapore</item>
+            <item>Sidney</item>
             <item>New York</item>
             <item>Istanbul</item>
             <item>Dubai</item>
-            <item>Kuala Lumpur</item>
+            <item>Hanoi</item>
             <item>Hong Kong</item>
             <item>Barcelona</item>
-
         </string-array>
+
+    <string-array name="politic">
+        <item>Merkel</item>
+        <item>Obama</item>
+        <item>Macron</item>
+        <item>May</item>
+        <item>Putin</item>
+        <item>Orban</item>
+        <item>Solberg</item>
+        <item>Abe</item>
+        <item>Ardern</item>
+    </string-array>
+
+    <string-array name="history">
+    <item>Steinzeit</item>
+    <item>Klassik</item>
+    <item>Moderne</item>
+    <item>Realismus</item>
+    <item>Antike</item>
+    <item>Aufklärung</item>
+    <item>Renaissance</item>
+    <item>Imperialismus</item>
+    </string-array>
 
 
 

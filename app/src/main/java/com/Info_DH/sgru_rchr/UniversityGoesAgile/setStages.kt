@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -60,6 +61,7 @@ class setStages : AppCompatActivity() {
 
         addStage.setOnClickListener {
             saveStage()
+
 
             nextBtn1.setOnClickListener {
                 startActivity(Intent(this, chooseNickname::class.java))
@@ -128,7 +130,7 @@ class setStages : AppCompatActivity() {
 
         }
 
-        endDate.setOnClickListener {
+        endDate1.setOnClickListener {
                 val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDay ->
 
                     showEnd.setText("" + mDay + "/" + (mMonth + 1) + "/" + mYear)
@@ -182,5 +184,6 @@ class setStages : AppCompatActivity() {
 
         showStart.text= ""
         showEnd.text = ""
+        editStage.text.clear()
     }
 }

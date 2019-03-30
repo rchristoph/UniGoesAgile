@@ -15,6 +15,7 @@ class chooseNickname : AppCompatActivity() {
 
     lateinit var mDatabase : DatabaseReference
     val mAuth = FirebaseAuth.getInstance()
+    var newItem: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,12 +30,24 @@ class chooseNickname : AppCompatActivity() {
                 view -> saveNickName()
         })
 
+        val adapter2 = ArrayAdapter.createFromResource(this,
+            R.array.Themes, android.R.layout.simple_spinner_item)
+        // Specify the layout to use when the list of choices appears
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        // Apply the adapter to the spinner
+        spinner1.adapter = adapter2
+        var selectTheme = spinner3.selectedItem
+
+
+
         val adapter = ArrayAdapter.createFromResource(this,
             R.array.animal_arrays, android.R.layout.simple_spinner_item)
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         // Apply the adapter to the spinner
         spinner1.adapter = adapter
+
+
 
     }
 
