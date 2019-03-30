@@ -44,7 +44,7 @@ class ChooseProject : AppCompatActivity() {
         datePicker.setOnClickListener {
             val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener{view, mYear, mMonth, mDay ->
 
-                showDate.setText(""+ mDay +"/"+mMonth +"/"+ mYear)
+                showDate.setText(""+ mDay +"/"+ (mMonth+1) +"/"+ mYear)
             }, year, month, day)
 
             dpd.show()
@@ -117,6 +117,7 @@ class ChooseProject : AppCompatActivity() {
         val intent = Intent(this@ChooseProject, setStages::class.java)
         println("Das ist meine objectId:${project.objectId}")
         intent.putExtra("projectID", project.objectId)
+        intent.putExtra("deadline", project.deadLine)
         startActivity(intent)
 
 
