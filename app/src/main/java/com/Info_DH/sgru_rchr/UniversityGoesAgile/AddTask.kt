@@ -9,10 +9,13 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.support.v4.app.Fragment
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.activity_add_task.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_register.*
 
 
 class AddTask : android.support.v4.app.DialogFragment() {
@@ -76,6 +79,18 @@ class AddTask : android.support.v4.app.DialogFragment() {
         editText.hint = hint
 
 
+     val adapter = ArrayAdapter.createFromResource(activity,
+            R.array.city_list, android.R.layout.simple_spinner_item)
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        // Apply the adapter to the spinner
+
+
+
+        spinner2?.adapter = adapter
+
+
         val builder = AlertDialog.Builder(activity!!)
             .setTitle(title)
             .setView(view)
@@ -116,5 +131,10 @@ class AddTask : android.support.v4.app.DialogFragment() {
 
         Toast.makeText(context, "New Task added to the List successfully" + task.objectId, Toast.LENGTH_SHORT).show()
     }
+
+   /* fun getValues(view: View) {
+        Toast.makeText(context, "Spinner 1 " + spinner2.selectedItem.toString() +
+                "\nSpinner 2 " + spinner2.selectedItem.toString(), Toast.LENGTH_LONG).show()
+    }*/
 
 }
