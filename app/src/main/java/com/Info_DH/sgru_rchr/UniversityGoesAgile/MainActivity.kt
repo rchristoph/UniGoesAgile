@@ -12,28 +12,16 @@ import android.support.v4.view.ViewPager
 import android.os.Bundle
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.ShareActionProvider
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import android.app.AlertDialog
-import android.app.Dialog
-import android.app.DialogFragment
+
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
-
-
+import android.support.v7.widget.Toolbar
+import android.view.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_drawer.*
-
-import kotlinx.android.synthetic.main.content_main.*
-
-import kotlinx.android.synthetic.main.fragment_main.view.*
 import kotlinx.android.synthetic.main.nav_header_drawer.*
 
 class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavigationItemSelectedListener {
@@ -57,6 +45,9 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -64,6 +55,9 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
         _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
         _dbuser = FirebaseDatabase.getInstance().getReference("Names")
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
        // setSupportActionBar(toolbar)
         // Create the adapter that will return a fragment for each of the three
@@ -81,14 +75,9 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
             val dialog = AddTask.newInstance(title= "Neue Aufgabe hinzufügen", hint = "Name der Aufgabe")
             dialog.show(supportFragmentManager, "editDescription")
 
-
-           // showFooter()
-
     }
 
-    /*    btnAdd!!.setOnClickListener{ view ->
-            addTask()
-        }*/
+
         var _taskListener = object : ValueEventListener {
             //Firebase delivers its data as a dataSnapshot
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -96,6 +85,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
               //  loadTaskList(dataSnapshot.child("tasks"))
                 toolbar.setTitle(dataSnapshot.child("projectName").value.toString())
                 setSupportActionBar(toolbar)
+                projektname.text = dataSnapshot.child("projectName").value.toString()
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // Getting Item failed, log a message
@@ -218,7 +208,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
 
-       // menuInflater.inflate(R.menu.drawer, menu)
+        menuInflater.inflate(R.menu.drawer, menu)
 
         menuInflater.inflate(R.menu.menu_main, menu)
 
@@ -244,12 +234,21 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
         }
         else if (item!!.itemId == R.id.menu_item_share){
+            return super.onOptionsItemSelected(item)
+
         }
 /*        else if (item!!.itemId == R.id.action_settings) {
             return true
         }*/
 
-        return super.onOptionsItemSelected(item)
+        else if (item!!.itemId == R.id.action_settings2 ) {
+              return true
+        }
+            return super.onOptionsItemSelected(item)
+
+
+
+
     }
 
     //Funktion für das TEilen der Prokekt ID
@@ -277,6 +276,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                 // Handle the camera action
             }
             R.id.nav_gallery -> {
+                Toast.makeText(this, "KLicken funktioniert", Toast.LENGTH_LONG).show()
 
             }
             R.id.nav_slideshow -> {
@@ -296,33 +296,6 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
-
-
-    private fun addMenuItemInNavMenuDrawer() {
-
-       // drawer_layout.
-
-
-
-
-    }
-
-
-/*
-    private void addMenuItemInNavMenuDrawer() {
-    NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
-
-    Menu menu = navView.getMenu();
-    Menu submenu = menu.addSubMenu("New Super SubMenu");
-
-    submenu.add("Super Item1");
-    submenu.add("Super Item2");
-    submenu.add("Super Item3");
-
-    navView.invalidate();
-}
-*/
-
 
 
 

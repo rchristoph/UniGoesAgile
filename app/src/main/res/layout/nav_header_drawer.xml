@@ -17,14 +17,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:text="@string/projektname"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.ActionMode.Title.Inverse"
+            android:id="@+id/projektname"
+            android:textAlignment="viewStart" android:textStyle="italic"
+            android:textColor="@color/calendar_bg"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/nav_header_vertical_spacing"
             android:text="@string/dein_name"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" android:id="@+id/username"
-            android:textSize="30sp"/>
-
+            android:textSize="30sp" android:textColor="@android:color/white" />
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/dein_nickname"
-            android:id="@+id/nickname" android:textSize="24sp"/>
+            android:id="@+id/nickname" android:textSize="24sp" android:textColor="@android:color/white"
+            android:textStyle="bold"/>
 
 </LinearLayout>

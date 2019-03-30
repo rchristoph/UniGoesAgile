@@ -43,11 +43,17 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="dein_name">Dein Name</string>
     <string name="dein_nickname">Dein Nickname</string>
+    <string name="importx">Import</string>
+    <string name="gallery">Gallery</string>
+    <string name="slideshow">Slideshow</string>
+    <string name="tools">Tools</string>
+    <string name="communicate">Communicate</string>
+    <string name="share">Share</string>
+    <string name="send">Send</string>
+    <string name="projektname">Projektname</string>
 
 
-
-
-        <string-array name="city_list">
+    <string-array name="city_list">
             <item>Bangkok</item>
             <item>London</item>
             <item>Paris</item>
