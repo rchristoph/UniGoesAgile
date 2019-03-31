@@ -49,13 +49,8 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-
-
 
 
         _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
@@ -89,12 +84,12 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
     }
 
-
+        //get all Tasks from Database
         var _taskListener = object : ValueEventListener {
+
             //Firebase delivers its data as a dataSnapshot
+
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                println("Datasnapshot: ${dataSnapshot.child("tasks")}")
-              //  loadTaskList(dataSnapshot.child("tasks"))
                 toolbar.setTitle(dataSnapshot.child("projectName").value.toString())
                 setSupportActionBar(toolbar)
                 val toggle = ActionBarDrawerToggle(
@@ -104,24 +99,25 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                 toggle.syncState()
                 nav_view.setNavigationItemSelectedListener(this@MainActivity)
 
-
+                //Get Name of project
                 projektname.text = dataSnapshot.child("projectName").value.toString()
             }
+
             override fun onCancelled(databaseError: DatabaseError) {
                 // Getting Item failed, log a message
                 //Log.w("ToDoActivity", "loadItem:onCancelled", databaseError.toException())
             }
         }
-
+        //PROJECTListener will be called first, then it will call the Tasklistener to get all tasks of a project
         var _projectListener = object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
+
+            //Snapshot to get data of the right project
             override fun onDataChange(snapshot: DataSnapshot) {
                 println("Der  Wert ist: ${snapshot.value}")
                 projektIdent = snapshot.child("ProjektId").value.toString()
-                println("Die Projektident vorm Funktionsstart ist: $projektIdent")
-                println("Meine uid ist: $uid")
                 username.text = "${snapshot.child("username").value.toString()}"
                 newtextview.text = "${snapshot.child("nickName").value.toString()} (Nickname)"
                 if (snapshot.value == null){
@@ -135,16 +131,6 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
 
         // enabling Toolbar bar app icon and behaving it as toggle button
-
-
-
-
-
-
-
-
-
-
 
 
     }
@@ -176,18 +162,21 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         }
     }
 
+    //If user clicks on Checkbox
     override fun onTaskChange(objectId: String, isDone: Boolean) {
-        //val task = _db.child(Statics.FIREBASE_TASK).child(objectId)
         val task = _dbprojekt.child(projektIdent).child("tasks").child("task").child(objectId)
         task.child("done").setValue(isDone)
     }
 
+    //If User deletes Task
     override fun onTaskDelete(objectId: String) {
         // val task = _db.child(Statics.FIREBASE_TASK).child(objectId)
         val task = _dbprojekt.child(projektIdent).child("tasks").child("task").child(objectId)
         task.removeValue()
         println("Das ist ist task: $task")
     }
+
+    //To write Userstory - start new activity
     override fun onTaskEdit(objectId: String, taskDesc: String) {
         //hier nehme ich die Task-ID, von der aus ich in der naechsten Activity direkt auf die Childnodes zugreifen kann
         val intent = Intent(this, EditTask::class.java)
@@ -196,18 +185,18 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         startActivity(intent)
     }
 
+    //If user assigns a task to himself
     override fun onTaskAssign(objectId: String) {
-
         _dbuser = FirebaseDatabase.getInstance().getReference("Names").child(uid)
 
-        //wenn ich zum ersten Mal etwas zuweise ist nickWert2 noch leer
+        //Before I assign at first, nickWert2 will be empty
         if (nickWert2.isEmpty()) {
 
             var _nameListener = object : ValueEventListener {
                 override fun onCancelled(p0: DatabaseError) {
                     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }
-
+                //Get another Datasnapshot of the right Nickname
                 override fun onDataChange(snapshot: DataSnapshot) {
                     println("Der  Wert ist: ${snapshot.value}")
                     nameIdent = snapshot.value.toString()
@@ -217,36 +206,32 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                     nickWert2 = nickWert.getValue().toString()
                     println("NICKWERT:$nickWert")
                     zsFassung(nickWert2, objectId)
-
                 }
-
             }
-
+            //Call namelistener
             _dbuser.child(nameIdent).addValueEventListener(_nameListener)
         } else {
             zsFassung(nickWert2, objectId)
         }
     }
 
+    //Write the assigned user to the DB
     private fun zsFassung (nickWert:String, objectId: String) {
 
         var stelle = _dbprojekt.child(projektIdent).child("tasks/task").child(objectId).child("assignee")
         stelle.setValue(nickWert)
     }
+
+    //Menu to sign out, share or change project
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-
-
         menuInflater.inflate(R.menu.drawer, menu)
-
         menuInflater.inflate(R.menu.menu_main, menu)
-
         val shareItem = menu!!.findItem(R.id.menu_item_share)
 
         shareActionProvider = MenuItemCompat.getActionProvider(shareItem) as ShareActionProvider
 
         setShareIntent()
         return super.onCreateOptionsMenu(menu)
-       // return true
     }
 
 
@@ -279,7 +264,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
     }
 
-    //Funktion für das TEilen der Prokekt ID
+    //Funktion für das Teilen der Prokekt ID
     private fun setShareIntent() {
 
         val shareIntent = Intent(Intent.ACTION_SEND)
@@ -324,11 +309,6 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
-
-
-
-
-
 }
 
 
