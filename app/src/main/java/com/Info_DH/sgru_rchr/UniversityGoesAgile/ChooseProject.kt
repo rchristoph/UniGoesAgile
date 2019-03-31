@@ -75,15 +75,15 @@ class ChooseProject : AppCompatActivity() {
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
 
-        datePicker.setOnClickListener {
-            val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener{view, mYear, mMonth, mDay ->
+            datePicker.setOnClickListener {
+                val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener{view, mYear, mMonth, mDay ->
 
-                showDate.setText(""+ mDay +"/"+ (mMonth+1) +"/"+ mYear)
-            }, year, month, day)
+                    showDate.setText(""+ mDay +"/"+ (mMonth+1) +"/"+ mYear)
+                }, year, month, day)
 
-            dpd.show()
+                dpd.show()
 
-        }
+            }
 
         //Variable für Buttons
         val createButton = findViewById<View>(R.id.createBtn) as Button
@@ -104,7 +104,7 @@ class ChooseProject : AppCompatActivity() {
                 var textfield = projectID.text.toString()
                 if (!textfield.isEmpty()){
                 createProject()
-            }
+                }
                 else {
                     Toast.makeText(this, "Namen eingeben! ;)", Toast.LENGTH_SHORT).show()
                 }
@@ -122,32 +122,38 @@ class ChooseProject : AppCompatActivity() {
         startActivity(Intent(this, MainActivity::class.java))
     }
 
-    // Neues Projekt erstellen
     private fun createProject(){
+
+        // An dieser Stelle wird die Klasse "Project" verknüpft
         val project = Project.create()
+
         val projectID = findViewById<View>(R.id.projectTxt) as TextView
+
+        //Übergebe die vom User eingegebenen Daten an die Klasse
         project.projectName = projectID.text.toString()
         project.deadLine = showDate.text.toString()
         project.theme = ""
+
+        //Schreibe die Daten in die DB
         val newProject = _db.push()
         project.objectId = newProject.key
+
         //Set the values for new Project in firebase
         newProject.setValue(project)
 
 
-        //Aktuelles Projekt in als Child zum User hinzufügen
+        //Aktuelle Projekt-ID als Child zum User in der DB hinzufügen
         val user = mAuth.currentUser
         val uid = user!!.uid
         mDatabase.child(uid).child("ProjektId").setValue(project.objectId)
         mDatabase.child(uid).child("ProjektName").setValue(project.projectName)
 
-
+        //Lege die Struktur Tasks/Task an. Dort werden später die Aufgaben gespeichert
         _db.child(project.objectId.toString()).child("tasks").child("task").setValue("")
 
         Toast.makeText(this, "New Project created successfully " + project.objectId, Toast.LENGTH_SHORT).show()
-        //startActivity(Intent(this, ToDoActivity::class.java))
 
-        //Gehe zu nächster Activity
+        //Gehe zu Activity in der Phasen angelegt werden und übergebe dabei zwei Variablen
         val intent = Intent(this@ChooseProject, setStages::class.java)
         println("Das ist meine objectId:${project.objectId}")
         intent.putExtra("projectID", project.objectId)

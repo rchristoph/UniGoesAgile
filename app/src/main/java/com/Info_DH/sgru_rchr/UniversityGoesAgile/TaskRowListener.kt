@@ -1,7 +1,7 @@
 package com.Info_DH.sgru_rchr.UniversityGoesAgile
 
-import android.provider.ContactsContract
 
+//Like a constructor for methods, to edit the task of the right row
 interface TaskRowListener {
     fun onTaskChange(objectId: String, isDone: Boolean)
     fun onTaskDelete(objectId: String)
