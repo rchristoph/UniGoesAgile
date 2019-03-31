@@ -11,19 +11,6 @@
         <item>Tiere</item>
         <item>Politik</item>
         <item>Epochen</item>
-
-    </string-array>
-    <string-array name="animal_arrays">
-        <item>Wähle ein Tier</item>
-        <item>Bär</item>
-        <item>Giraffe</item>
-        <item>Eule</item>
-        <item>Löwe</item>
-        <item>Kranich</item>
-        <item>Wiesel</item>
-        <item>Okapi</item>
-        <item>Wolf</item>
-        <item>Robbe</item>
     </string-array>
 
     <string-array name="stage_arrays">
@@ -74,28 +61,6 @@
             <item>Barcelona</item>
         </string-array>
 
-    <string-array name="politic">
-        <item>Merkel</item>
-        <item>Obama</item>
-        <item>Macron</item>
-        <item>May</item>
-        <item>Putin</item>
-        <item>Orban</item>
-        <item>Solberg</item>
-        <item>Abe</item>
-        <item>Ardern</item>
-    </string-array>
-
-    <string-array name="history">
-    <item>Steinzeit</item>
-    <item>Klassik</item>
-    <item>Moderne</item>
-    <item>Realismus</item>
-    <item>Antike</item>
-    <item>Aufklärung</item>
-    <item>Renaissance</item>
-    <item>Imperialismus</item>
-    </string-array>
 
 
 

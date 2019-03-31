@@ -4,10 +4,7 @@ import java.util.*
 
 object CalendarHelper {
 
-    fun getCurrentDateTime(): Date {
-        return Calendar.getInstance().time
-    }
-
+    // Gib das aktuelle Datum als Long aus
     fun getCurrentDateInMills() : Long{
         var timeFormat = Calendar.getInstance().timeInMillis
         val format = SimpleDateFormat("yyyy.MM.dd")
@@ -16,7 +13,7 @@ object CalendarHelper {
         return Calendar.getInstance().timeInMillis
     }
 
-
+    //Mache aus einem String den Datentyp long
     fun convertDateToLong(date: String): Long {
         val df = SimpleDateFormat("dd/MM/yyyy")
         return df.parse(date).time

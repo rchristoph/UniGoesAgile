@@ -22,10 +22,8 @@ class chooseNickname : AppCompatActivity() {
     var politic = arrayOf("Wähle PolitikerIn", "Merkel", "Obama", "May", "Macron", "Putin", "Orban", "Solberg", "Arden", "Abe")
     var history = arrayOf("Wähle eine Epoche", "Steinzeit", "Klassik", "Moderne", "Realismus", "Antike", "Aufklärung", "Renaissance")
     var strings = arrayOf("")
-    var selectTheme: String = ""
     val user = mAuth.currentUser
     val uid = user!!.uid
-    var projectTheme: String = ""
 
 
 
@@ -40,60 +38,29 @@ class chooseNickname : AppCompatActivity() {
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Names")
 
-        //Hier brauche ich einen Datasnapshot
-        var _themeListener = object : ValueEventListener {
-            override fun onDataChange(p0: DataSnapshot) {
 
-                if (p0.exists()) {
-                    projectTheme = p0.child("Theme").getValue().toString()
-                    println("PRJKT$projectTheme")
-                }
-            }
-            override fun onCancelled(p0: DatabaseError) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-        }
-        mDatabase.child("Projects").child(projectID).addValueEventListener(_themeListener)
-
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, animals)
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        // Apply the adapter to the spinner
+        spinner1.adapter = adapter
 
         nextBtn.setOnClickListener(View.OnClickListener { view ->
             saveNickName(projectID)
         })
 
-        //Prüfe ob es bereits ein Theme gibt
-        if (!projectTheme.isEmpty()) {
-            //Das bedeutet dass es noch kein Theme gibt weil der User das Projekt gerade neu angelegt hat
-            val allThemes = arrayOf("", "Städte", "Tiere", "Politik", "Epochen")
 
-            val adapter2 = ArrayAdapter(this, android.R.layout.simple_spinner_item, allThemes)
-            // Specify the layout to use when the list of choices appears
-            adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
-            spinner3.adapter = adapter2
-
-            println("SelectThem:$selectTheme")
-            selectedBtn.setOnClickListener {
-                selectTheme = spinner3.selectedItem.toString()
-                themeSelector(selectTheme)
-            }
-
-        } else {
-            themeSelector(projectTheme)
-        }
     }
 
 
     private fun saveNickName(projectID: String){
         var nickNameTxt = findViewById<View>(R.id.spinner1) as Spinner
-        var themeTxt = findViewById<View>(R.id.spinner3) as Spinner
         val nickName = nickNameTxt.selectedItem.toString()
-        val theme = themeTxt.selectedItem.toString()
 
-        if (!nickName.isEmpty() && !theme.isEmpty()){
+        if (!nickName.isEmpty()){
             val user = mAuth.currentUser
             val uid = user!!.uid
             mDatabase.child(uid).child("Name").child("Nickname").setValue(nickName)
-            mDatabase.child("Projects").child(projectID).child("Theme").setValue(selectTheme)
 
             startActivity(Intent(this, MainActivity::class.java))
 
@@ -101,20 +68,9 @@ class chooseNickname : AppCompatActivity() {
 
     }
 
-   private fun themeSelector(selectTheme: String) {
-       if(selectTheme=="Städte") {
-           strings = cities
-       }else if(selectTheme=="Tiere"){
-           strings = animals}else if(selectTheme=="Politik"){
-           strings = politic} else{
-           strings = history}
-       println("Hier die Strings:$strings")
-       val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, strings)
-       // Specify the layout to use when the list of choices appears
-       adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-       // Apply the adapter to the spinner
-       spinner1.adapter = adapter
-   }
+
+
+
 
 }
 

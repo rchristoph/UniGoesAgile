@@ -17,21 +17,20 @@ class register : AppCompatActivity() {
     val mAuth = FirebaseAuth.getInstance()
     lateinit var mDatabase : DatabaseReference
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
 
+        setContentView(R.layout.activity_register)
         val registerBtn = findViewById<View>(R.id.nextBtn) as Button
 
-
+        //Set var mDatabase to the right position in DB
         mDatabase = FirebaseDatabase.getInstance().getReference("Names")
 
 
         registerBtn.setOnClickListener(View.OnClickListener {
                 view -> registerUser()
         })
-
-
     }
 
     private fun registerUser () {
@@ -43,13 +42,17 @@ class register : AppCompatActivity() {
         var password = passwordTxt.text.toString()
         var name = nameTxt.text.toString()
 
+        //Check if everything is filled out
         if (!email.isEmpty() && !password.isEmpty() && !name.isEmpty()) {
+            //Save new User in Database/Authentication
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val user = mAuth.currentUser
                     val uid = user!!.uid
+                    //Save new User with uid in realtime-database
                     mDatabase.child(uid).child("Name").setValue(name)
                     saveUserToFirebaseDatabase()
+                    //User can now choose a project
                     startActivity(Intent(this, ChooseProject::class.java))
                     Toast.makeText(this, "Successfully registered :)", Toast.LENGTH_LONG).show()
                 }else {
@@ -65,7 +68,6 @@ class register : AppCompatActivity() {
     private fun saveUserToFirebaseDatabase() {
         val uid = FirebaseAuth.getInstance().uid ?:""
         val ref = FirebaseDatabase.getInstance().getReference("/Names/$uid")
-
         val user = User(uid, nameTxt.text.toString(), nickname.toString())
         ref.setValue(user)
             .addOnSuccessListener {
@@ -74,6 +76,6 @@ class register : AppCompatActivity() {
     }
 }
 
-
+//! Content of Nickname will be stored later
 class User(val uid:String, val name: String, val nickname: String)
 
