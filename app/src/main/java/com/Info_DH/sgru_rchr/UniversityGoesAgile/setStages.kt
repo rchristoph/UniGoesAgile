@@ -55,19 +55,17 @@ class setStages : AppCompatActivity() {
         stageName = findViewById(R.id.editStage)
         phasenBeginn = findViewById(R.id.showStart)
         phasenEnde = findViewById(R.id.showEnd)
-
         listView = findViewById(R.id.LIstview)
 
 
         addStage.setOnClickListener {
             saveStage()
 
-
             nextBtn1.setOnClickListener {
-                startActivity(Intent(this, chooseNickname::class.java))
-
+                val intent = Intent(this, chooseNickname::class.java)
+                intent.putExtra("projectID", projectID)
+                startActivity(intent)
             }
-
         }
 
         //Datasnapshot
@@ -83,13 +81,10 @@ class setStages : AppCompatActivity() {
                     for (h in p0.children) {
                         val stage = h.getValue(Stage::class.java)
                         stageList.add(stage!!)
-
                     }
-                    val phasenSpeicher = p0.child(stageId).child("phasenEnde").getValue()
                     val adapter = StageAdapter(applicationContext, R.layout.stages, stageList)
                     listView.adapter = adapter
                 }
-
             }
 
             override fun onCancelled(p0: DatabaseError) {
@@ -98,7 +93,6 @@ class setStages : AppCompatActivity() {
 
         }
         ref.child("Stages").child("Stage").addValueEventListener(_stageListener)
-       var getStage = ref.child("Stages").child("Stage").child(stageId).toString()
 
 //Calendar method
         startDate.setOnClickListener {

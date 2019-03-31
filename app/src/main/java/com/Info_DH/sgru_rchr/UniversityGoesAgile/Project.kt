@@ -8,5 +8,5 @@ class Project{
     var objectId: String? = null
     var projectName: String? = null
     var deadLine: String? = null
-
+    var theme: String? = null
 }

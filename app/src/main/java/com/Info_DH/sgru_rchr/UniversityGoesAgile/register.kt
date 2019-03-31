@@ -57,7 +57,7 @@ class register : AppCompatActivity() {
                     val uid = user!!.uid
                     mDatabase.child(uid).child("Name").setValue(name)
                     saveUserToFirebaseDatabase()
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, ChooseProject::class.java))
                     Toast.makeText(this, "Successfully registered :)", Toast.LENGTH_LONG).show()
                 }else {
                     Toast.makeText(this, "Error registering, try again later :(", Toast.LENGTH_LONG).show()

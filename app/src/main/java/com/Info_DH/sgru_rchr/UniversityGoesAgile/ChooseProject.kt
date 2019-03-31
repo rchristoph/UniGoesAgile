@@ -22,23 +22,24 @@ class ChooseProject : AppCompatActivity() {
     var mAuth = FirebaseAuth.getInstance()
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         //Referenz zu der Firebase Datenbank wird in einer Variable gespeichert
-        //Eine Referenz zu den Projekten und eine zu den Namen
+        //Referenz zum Child-Node in dem die User gespeichert sind
         _db = FirebaseDatabase.getInstance().getReference("Projects")
         mDatabase = FirebaseDatabase.getInstance().getReference("Names")
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choose_project)
 
+        //Layout Switch: Neues Projekt vs. bestehendem Projekt beitreten
         changeActivity.setOnClickListener {
             textInputLayout4.visibility = View.GONE
             joinBtn.visibility = View.GONE
             changeActivity.visibility = View.GONE
             changeActivity.visibility = View.GONE
             joinProj.visibility = View.GONE
-
 
             ddl.visibility = View.VISIBLE
             joinExist.visibility = View.VISIBLE
@@ -48,7 +49,6 @@ class ChooseProject : AppCompatActivity() {
             showDate.visibility = View.VISIBLE
             datePicker.visibility = View.VISIBLE
             newtextview.visibility = View.VISIBLE
-
         }
 
         joinExist.setOnClickListener {
@@ -58,7 +58,6 @@ class ChooseProject : AppCompatActivity() {
             changeActivity.visibility = View.VISIBLE
             joinProj.visibility = View.VISIBLE
 
-
             ddl.visibility = View.GONE
             joinExist.visibility = View.GONE
             projectTxt.visibility = View.GONE
@@ -67,11 +66,10 @@ class ChooseProject : AppCompatActivity() {
             showDate.visibility = View.GONE
             datePicker.visibility = View.GONE
             newtextview.visibility = View.GONE
-
-
         }
 
-        //Calendar
+
+        //Calendar vars+method
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
@@ -87,21 +85,20 @@ class ChooseProject : AppCompatActivity() {
 
         }
 
-        //Variablen für die Buttons werden erstellt
+        //Variable für Buttons
         val createButton = findViewById<View>(R.id.createBtn) as Button
         val joinButton = findViewById<View>(R.id.joinBtn) as Button
 
-        //Das passiert wenn der "Join Button" gedrückt wird:
+        //An einem vorhandenen Projekt teilnehmen
             joinButton.setOnClickListener(View.OnClickListener {
                 val projectId = findViewById<View>(R.id.projectid) as TextView
                 var textfield = projectId.text.toString()
                 if (!textfield.isEmpty()) {
                     joinProject()
                 }
+            })
 
-            }
-            )
-        //Das passiert wenn der Create Button gedrückt wird
+        //Neues Projekt wird angelegt
             createButton.setOnClickListener(View.OnClickListener {
                 val projectID = findViewById<View>(R.id.projectTxt) as TextView
                 var textfield = projectID.text.toString()
@@ -111,11 +108,10 @@ class ChooseProject : AppCompatActivity() {
                 else {
                     Toast.makeText(this, "Namen eingeben! ;)", Toast.LENGTH_SHORT).show()
                 }
-                }
-            )
+                })
     }
 
-    //Funktion wenn der Join Button gedrückt wird
+    //An Projekt teilnehmen:
     private fun joinProject(){
 
         //Aktuelles Projekt in als Child zum User hinzufügen
@@ -124,14 +120,15 @@ class ChooseProject : AppCompatActivity() {
         val uid = user!!.uid
         mDatabase.child(uid).child("ProjektId").setValue(projectID.text.toString())
         startActivity(Intent(this, MainActivity::class.java))
-
     }
-    // Funktion wenn der Create Button gedrückt wird
+
+    // Neues Projekt erstellen
     private fun createProject(){
         val project = Project.create()
         val projectID = findViewById<View>(R.id.projectTxt) as TextView
         project.projectName = projectID.text.toString()
         project.deadLine = showDate.text.toString()
+        project.theme = ""
         val newProject = _db.push()
         project.objectId = newProject.key
         //Set the values for new Project in firebase
@@ -143,22 +140,20 @@ class ChooseProject : AppCompatActivity() {
         val uid = user!!.uid
         mDatabase.child(uid).child("ProjektId").setValue(project.objectId)
         mDatabase.child(uid).child("ProjektName").setValue(project.projectName)
-        mDatabase.child(uid).child("Deadline").setValue(project.deadLine)
+
 
         _db.child(project.objectId.toString()).child("tasks").child("task").setValue("")
 
         Toast.makeText(this, "New Project created successfully " + project.objectId, Toast.LENGTH_SHORT).show()
         //startActivity(Intent(this, ToDoActivity::class.java))
 
+        //Gehe zu nächster Activity
         val intent = Intent(this@ChooseProject, setStages::class.java)
         println("Das ist meine objectId:${project.objectId}")
         intent.putExtra("projectID", project.objectId)
         intent.putExtra("deadline", project.deadLine)
         startActivity(intent)
-
-
     }
-
 }
 
 
