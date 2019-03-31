@@ -10,10 +10,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ListView
+import android.widget.Spinner
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -47,6 +50,9 @@ class Todo : Fragment() {
     var nickWert2: String  = ""
     private var listener: OnFragmentInteractionListener? = null
     lateinit var _adapter: TaskAdapter
+    var phasenindikator:Long? = 0
+    var zwei:Long = 2
+    lateinit var meinspinner: Spinner
 
 
     companion object {
@@ -55,15 +61,17 @@ class Todo : Fragment() {
          * fragment.
          */
         private val ARG_SECTION_NUMBER = "section_number"
+        private val ARG_Phasen_NUMBER = "phasen_number"
 
         /**
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        fun newInstance(sectionNumber: Int): Todo {
+        fun newInstance(sectionNumber: Int, phase: Long): Todo {
             val fragment = Todo()
             val args = Bundle()
             args.putInt(ARG_SECTION_NUMBER, sectionNumber)
+            args.putLong(ARG_Phasen_NUMBER, phase)
             fragment.arguments = args
             return fragment
         }
@@ -78,6 +86,7 @@ class Todo : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+         phasenindikator = arguments?.getLong(ARG_Phasen_NUMBER)
 
             println("die Sektionsnummer ist: ${arguments.get("section_number")} ")
 
@@ -130,9 +139,12 @@ class Todo : Fragment() {
         println("das ist _dbproject: $_taskListener")
 
 
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_todo, container, false)
     }
+
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -141,6 +153,9 @@ class Todo : Fragment() {
 
 
     private fun loadTaskList(dataSnapshot: DataSnapshot) {
+
+
+
         Log.d("ToDoActivity", "loadTaskList")
 
         val tasks = dataSnapshot.children.iterator()
@@ -171,24 +186,29 @@ class Todo : Fragment() {
                 task.done = map.get("done") as Boolean?
                 task.taskDesc = map.get("taskDesc") as String?
                 task.assignee = map.get("assignee") as String?
+                task.phase = map.get("phase") as Long
+
+                println("testtesttest:::::: ${phasenindikator}")
 
                 //task.edit = map.get("edit") as String?
-                if(arguments.get("section_number")== 1) {
-                    if (task.assignee == "leer"&&task.done == false) {
-                        _taskList!!.add(task)
-                        println("_taskList: $_taskList")
+                if(task.phase == phasenindikator) {
+                    if (arguments.get("section_number") == 1) {
+                        if (task.assignee == "leer" && task.done == false) {
+                            _taskList!!.add(task)
+                            println("_taskList: $_taskList")
+                        }
+                    } else if (arguments.get("section_number") == 2) {
+                        if (task.assignee != "leer" && task.done == false) {
+                            _taskList!!.add(task)
+                        }
+                    } else if (arguments.get("section_number") == 3) {
+                        if (task.done == true) {
+                            _taskList!!.add(task)
+                        }
                     }
                 }
-                else if(arguments.get("section_number")== 2) {
-                    if (task.assignee != "leer"&& task.done == false) {
-                        _taskList!!.add(task)
-                    }
-                }
-                else if(arguments.get("section_number")== 3) {
-                    if (task.done == true) {
-                        _taskList!!.add(task)
-                    }
-                }
+
+
             }
             println("_taskList = $_taskList")
 

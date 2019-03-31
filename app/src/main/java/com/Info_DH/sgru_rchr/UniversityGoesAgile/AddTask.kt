@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import android.widget.Toast.LENGTH_LONG
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -59,6 +60,7 @@ class AddTask : android.support.v4.app.DialogFragment() {
     lateinit var _adapter: StageAdapter
     lateinit var listView: ListView
     lateinit var arrayList: ArrayList<String>
+    var phase:Long = 0
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val title = arguments?.getString(EXTRA_TITLE)
@@ -114,6 +116,17 @@ class AddTask : android.support.v4.app.DialogFragment() {
 
         meinspinner?.adapter = aa
 
+        meinspinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                println("onItemSelected position lalalala = $position id = $id")
+                phase = id
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+
+            }
+        }
+
 
 
 
@@ -152,6 +165,8 @@ class AddTask : android.support.v4.app.DialogFragment() {
 
     fun addTask(){
 
+
+
         //Declare and Initialise the Task
         val task = Task.create()
 
@@ -161,6 +176,7 @@ class AddTask : android.support.v4.app.DialogFragment() {
         task.author = user!!.uid
         task.edit = ""
         task.assignee = "leer"
+        task.phase = phase
 
         //Get the object id for the new task from the Firebase Database
         //Neue Tasks werden als Children von dem Projekt angelegt, dem der/die User_in zugewiesen ist.

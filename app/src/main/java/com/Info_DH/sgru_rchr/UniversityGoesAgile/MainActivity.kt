@@ -23,6 +23,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.*
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.activity_add_task.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
     var nickWert2: String  = ""
     lateinit var stageList: MutableList<Phasen>
     lateinit var arrayList: ArrayList<String>
+    var phase:Long = 0
 
 
     lateinit var _adapter: TaskAdapter
@@ -68,6 +70,8 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
 
 
+
+
         _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
         _dbuser = FirebaseDatabase.getInstance().getReference("Names")
 
@@ -81,7 +85,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this@MainActivity)
 
-       // setSupportActionBar(toolbar)
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
@@ -91,6 +95,49 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
         container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
+
+        var _spinnerlistener = object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                // loadPhasenList(dataSnapshot)
+                if (dataSnapshot.child("Stages")!!.exists()) {
+
+
+
+
+                    stageList!!.clear()
+                    arrayList!!.clear()
+
+                    for (h in dataSnapshot.child("Stages").child("Stage").children) {
+                        val stage = h.getValue(Phasen::class.java)
+                        println(h.getValue().toString())
+                        stageList.add(stage!!)
+                        //    arrayList.add(dataSnapshot.child("Stages").child("Stage").child("-Lb5FqD2R9NezzOIiZwU").child("stageName").value.toString())
+                        arrayList.add(stage!!.stageName)
+                        println("Stage.stageName = ${stage.stageName}")
+
+
+                        println("stage::::::::$stage")
+
+
+                    }
+                    println("stagelist:::::: ${stageList}")
+                    println("ArrayList:::: $arrayList")
+
+                    var aa = ArrayAdapter(this@MainActivity, android.R.layout.simple_spinner_item, arrayList)
+                    aa.notifyDataSetChanged()
+                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spinner3?.adapter = aa
+
+                }
+
+            }
+
+        }
 
 
 
@@ -115,36 +162,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
 
 
-               // loadPhasenList(dataSnapshot)
-                if (dataSnapshot.child("Stages")!!.exists()) {
 
-
-
-
-                    stageList!!.clear()
-
-                    for (h in dataSnapshot.child("Stages").child("Stage").children) {
-                        val stage = h.getValue(Phasen::class.java)
-                        println(h.getValue().toString())
-                        stageList.add(stage!!)
-                    //    arrayList.add(dataSnapshot.child("Stages").child("Stage").child("-Lb5FqD2R9NezzOIiZwU").child("stageName").value.toString())
-                        arrayList.add(stage!!.stageName)
-                        println("Stage.stageName = ${stage.stageName}")
-
-
-                        println("stage::::::::$stage")
-
-
-                    }
-                    println("stagelist:::::: ${stageList}")
-                    println("ArrayList:::: $arrayList")
-
-                    var aa = ArrayAdapter(this@MainActivity, android.R.layout.simple_spinner_item, arrayList)
-                    aa.notifyDataSetChanged()
-                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    spinner3?.adapter = aa
-
-                }
 
 
             }
@@ -169,10 +187,32 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                     startChoose()
                 }
                 _dbprojekt.child(projektIdent).orderByKey().addValueEventListener(_taskListener)
+                _dbprojekt.child(projektIdent).orderByKey().addListenerForSingleValueEvent(_spinnerlistener)
             }
         }
 
         _dbuser.child(uid).addValueEventListener(_projectListener)
+
+
+        spinner3.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                println("onItemSelected position Main = $position id = $id")
+                phase = id
+                println("------phase-------$phase")
+
+
+                container.adapter.notifyDataSetChanged()
+
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+
+            }
+        }
+
+
+
 
         fab!!.setOnClickListener { view ->
 
@@ -182,6 +222,11 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
 
         // enabling Toolbar bar app icon and behaving it as toggle button
+
+
+
+
+
 
     }
 
@@ -203,12 +248,18 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         override fun getItem(position: Int): Fragment {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return Todo.newInstance(position + 1)
+
+            return Todo.newInstance(position + 1, phase)
         }
 
         override fun getCount(): Int {
             // Show 3 total pages.
             return 3
+
+        }
+
+        override fun getItemPosition(`object`: Any?): Int {
+            return POSITION_NONE
         }
     }
 

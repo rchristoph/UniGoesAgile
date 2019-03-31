@@ -38,8 +38,16 @@
 
                     app:popupTheme="@style/AppTheme.PopupOverlay"
                     app:layout_scrollFlags="scroll|enterAlways">
+                <Spinner
+                        android:id="@+id/spinner3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp" android:gravity="right"/>
+
 
             </android.support.v7.widget.Toolbar>
+
+
 
             <android.support.design.widget.TabLayout
                     android:id="@+id/tabs"
@@ -101,8 +109,6 @@
              android:layout_height="match_parent"/>
 
 
-
-
     <android.support.design.widget.NavigationView
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"
@@ -111,7 +117,6 @@
             android:fitsSystemWindows="true"
             app:headerLayout="@layout/nav_header_drawer"
             app:menu="@menu/activity_drawer_drawer">
-
 
 
     </android.support.design.widget.NavigationView>
