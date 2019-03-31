@@ -23,15 +23,17 @@
                 android:inputType="textCapSentences|textNoSuggestions"
         />
 
+        <TextView
+                android:text="Phase wählen:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/textView7" android:layout_weight="1"
+                android:paddingTop="20dp" android:textColorLink="@android:color/black"
+                android:textAppearance="@android:style/TextAppearance.Material.Widget.PopupMenu.Large"/>
         <Spinner
                 android:id="@+id/spinner2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"/>
-        <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" android:id="@+id/listviewadd"/>
-        <!--android:entries="@array/city_list" -->
 
 
     </android.support.design.widget.TextInputLayout>

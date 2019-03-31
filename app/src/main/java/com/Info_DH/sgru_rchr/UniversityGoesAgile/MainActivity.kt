@@ -112,11 +112,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
 
 
-                fab!!.setOnClickListener { view ->
 
-                    val dialog = AddTask.newInstance(title= "Neue Aufgabe hinzufügen", hint = "Name der Aufgabe")
-                    dialog.show(supportFragmentManager, "editDescription")
-                }
 
 
                // loadPhasenList(dataSnapshot)
@@ -177,6 +173,12 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         }
 
         _dbuser.child(uid).addValueEventListener(_projectListener)
+
+        fab!!.setOnClickListener { view ->
+
+            val dialog = AddTask.newInstance(title= "Neue Aufgabe hinzufügen", hint = "Name der Aufgabe", phasenlist = arrayList)
+            dialog.show(supportFragmentManager, "editDescription")
+        }
 
 
         // enabling Toolbar bar app icon and behaving it as toggle button
