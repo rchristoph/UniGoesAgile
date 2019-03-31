@@ -16,6 +16,7 @@
         <activity android:name=".chooseNickname">
         </activity>
         <activity android:name=".setStages">
+
         </activity>
         <!--
 <activity android:name=".AddTask">
@@ -26,6 +27,11 @@
                 android:name=".MainActivity"
                 android:label="@string/title_activity_main"
                 android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity
                 android:name=".EditTask"
@@ -38,11 +44,7 @@
         </activity>
 
         <activity android:name=".register">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <meta-data

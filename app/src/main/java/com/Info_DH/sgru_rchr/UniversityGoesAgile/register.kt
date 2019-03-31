@@ -32,14 +32,7 @@ class register : AppCompatActivity() {
         })
 
 
-
-
-
-
-
     }
-
-
 
     private fun registerUser () {
         val emailTxt = findViewById<View>(R.id.emailTxt) as EditText

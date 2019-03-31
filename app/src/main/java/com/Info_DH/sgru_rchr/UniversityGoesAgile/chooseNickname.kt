@@ -34,6 +34,7 @@ class chooseNickname : AppCompatActivity() {
         setContentView(R.layout.activity_choose_nickname)
 
         val projectID = intent.getStringExtra("projectID")
+        println("")
 
         val nextBtn = findViewById<View>(R.id.nextBtn)
 

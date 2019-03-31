@@ -197,7 +197,10 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
     }
 
     override fun onTaskAssign(objectId: String) {
+
         _dbuser = FirebaseDatabase.getInstance().getReference("Names").child(uid)
+
+        //wenn ich zum ersten Mal etwas zuweise ist nickWert2 noch leer
         if (nickWert2.isEmpty()) {
 
             var _nameListener = object : ValueEventListener {
@@ -211,7 +214,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                     println("Die Name ident vorm Funktionsstart ist: $nameIdent")
                     println("Meine uid ist: $uid")
                     var nickWert = snapshot.child("nickName")
-                    var nickWert2 = nickWert.getValue().toString()
+                    nickWert2 = nickWert.getValue().toString()
                     println("NICKWERT:$nickWert")
                     zsFassung(nickWert2, objectId)
 

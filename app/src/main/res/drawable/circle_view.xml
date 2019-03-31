@@ -5,6 +5,6 @@
           android:height="120dp">
     </size>
 
-    <stroke android:color="@color/colorAccent"
+    <stroke android:color="@color/colorTextInput"
             android:width="1dp"></stroke>
 </shape>

@@ -71,6 +71,7 @@
             app:layout_constraintHorizontal_bias="0.497"
             app:srcCompat="@drawable/logo1zu1"
             android:background="@drawable/circle_view"
+            android:elevation="5dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/textInputLayout2" app:layout_constraintVertical_bias="0.0"/>
     <TextView
