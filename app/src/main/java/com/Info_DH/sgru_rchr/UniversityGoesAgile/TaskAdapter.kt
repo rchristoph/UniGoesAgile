@@ -61,8 +61,6 @@ class TaskAdapter(context: Context, taskList: MutableList<Task>) : BaseAdapter()
 
         return view
     }
-
-
         override fun getItem(index: Int): Any {
         return _taskList.get(index)
     }

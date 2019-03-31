@@ -27,9 +27,12 @@
                 android:id="@+id/spinner2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spinner"
-                android:layout_margin="10dp"
-                android:entries="@array/city_list" />
+                android:layout_margin="10dp"/>
+        <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:id="@+id/listviewadd"/>
+        <!--android:entries="@array/city_list" -->
+
 
     </android.support.design.widget.TextInputLayout>
 </FrameLayout>

@@ -21,7 +21,10 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.*
+import android.widget.ArrayAdapter
+import kotlinx.android.synthetic.main.activity_add_task.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_drawer.*
 import kotlinx.android.synthetic.main.app_bar_drawer.*
@@ -40,8 +43,12 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
     var projektIdent:String = ""
     private var shareActionProvider: ShareActionProvider? = null
     var _taskList: MutableList<Task>? = null
+    var _phasenList: MutableList<Task>? = null
     var nameIdent : String = ""
     var nickWert2: String  = ""
+    lateinit var stageList: MutableList<Phasen>
+    lateinit var arrayList: ArrayList<String>
+
 
     lateinit var _adapter: TaskAdapter
 
@@ -54,7 +61,8 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        stageList = mutableListOf()
+        arrayList = arrayListOf()
 
 
 
@@ -84,12 +92,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
 
-        fab!!.setOnClickListener { view ->
 
-            val dialog = AddTask.newInstance(title= "Neue Aufgabe hinzufügen", hint = "Name der Aufgabe")
-            dialog.show(supportFragmentManager, "editDescription")
-
-    }
 
 
         var _taskListener = object : ValueEventListener {
@@ -105,9 +108,49 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                 drawer_layout.addDrawerListener(toggle)
                 toggle.syncState()
                 nav_view.setNavigationItemSelectedListener(this@MainActivity)
-
-
                 projektname.text = dataSnapshot.child("projectName").value.toString()
+
+
+
+                fab!!.setOnClickListener { view ->
+
+                    val dialog = AddTask.newInstance(title= "Neue Aufgabe hinzufügen", hint = "Name der Aufgabe")
+                    dialog.show(supportFragmentManager, "editDescription")
+                }
+
+
+               // loadPhasenList(dataSnapshot)
+                if (dataSnapshot.child("Stages")!!.exists()) {
+
+
+
+
+                    stageList!!.clear()
+
+                    for (h in dataSnapshot.child("Stages").child("Stage").children) {
+                        val stage = h.getValue(Phasen::class.java)
+                        println(h.getValue().toString())
+                        stageList.add(stage!!)
+                    //    arrayList.add(dataSnapshot.child("Stages").child("Stage").child("-Lb5FqD2R9NezzOIiZwU").child("stageName").value.toString())
+                        arrayList.add(stage!!.stageName)
+                        println("Stage.stageName = ${stage.stageName}")
+
+
+                        println("stage::::::::$stage")
+
+
+                    }
+                    println("stagelist:::::: ${stageList}")
+                    println("ArrayList:::: $arrayList")
+
+                    var aa = ArrayAdapter(this@MainActivity, android.R.layout.simple_spinner_item, arrayList)
+                    aa.notifyDataSetChanged()
+                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spinner3?.adapter = aa
+
+                }
+
+
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // Getting Item failed, log a message
@@ -137,17 +180,6 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
 
         // enabling Toolbar bar app icon and behaving it as toggle button
-
-
-
-
-
-
-
-
-
-
-
 
     }
 
@@ -324,8 +356,59 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         return true
     }
 
+/*    private fun loadPhasenList(dataSnapshot: DataSnapshot) {
+        Log.d("ToDoActivity", "loadTaskList")
+
+        val tasks = dataSnapshot.children.iterator()
+        println("Das ist das Task Objekt: $tasks")
+
+        //Check if current database contains any collection
+        if (tasks.hasNext()) {
+
+            _taskList!!.clear()
 
 
+            val listIndex = tasks.next()
+            val itemsIterator = listIndex.children.iterator()
+
+            //check if the collection has any task or not
+            while (itemsIterator.hasNext()) {
+
+
+                //get current task
+                val currentItem = itemsIterator.next()
+                val task = Task.create()
+
+                //get current data in a map
+                val map = currentItem.getValue() as HashMap<String, Any>
+
+                //key will return the Firebase ID
+                task.objectId = currentItem.key
+                task.done = map.get("done") as Boolean?
+                task.taskDesc = map.get("taskDesc") as String?
+                task.assignee = map.get("assignee") as String?
+
+                //task.edit = map.get("edit") as String?
+*//*                if(arguments.get("section_number")== 1) {
+                    if (task.assignee == "leer"&&task.done == false) {
+                        _taskList!!.add(task)
+                    }
+                }
+                else if(arguments.get("section_number")== 2) {
+                    if (task.assignee != "leer"&& task.done == false) {
+                        _taskList!!.add(task)
+                    }
+                }
+                else if(arguments.get("section_number")== 3) {
+                    if (task.done == true) {
+                        _taskList!!.add(task)
+                    }*//*
+                }
+            }
+        }
+        //alert adapter that has changed
+    //    _adapter.notifyDataSetChanged()
+    //}*/
 
 
 }

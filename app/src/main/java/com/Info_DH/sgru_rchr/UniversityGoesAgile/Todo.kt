@@ -176,6 +176,7 @@ class Todo : Fragment() {
                 if(arguments.get("section_number")== 1) {
                     if (task.assignee == "leer"&&task.done == false) {
                         _taskList!!.add(task)
+                        println("_taskList: $_taskList")
                     }
                 }
                 else if(arguments.get("section_number")== 2) {
@@ -189,6 +190,8 @@ class Todo : Fragment() {
                     }
                 }
             }
+            println("_taskList = $_taskList")
+
         }
         //alert adapter that has changed
         _adapter.notifyDataSetChanged()
@@ -196,20 +199,6 @@ class Todo : Fragment() {
 
 
 
-
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
     interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
