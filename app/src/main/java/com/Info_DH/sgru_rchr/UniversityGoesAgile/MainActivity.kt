@@ -23,6 +23,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.*
+import android.webkit.WebViewFragment
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.activity_add_task.*
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
     lateinit var stageList: MutableList<Phasen>
     lateinit var arrayList: ArrayList<String>
     var phase:Long = 0
-
+    val obj = Todo()
 
     lateinit var _adapter: TaskAdapter
 
@@ -158,12 +159,22 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                 projektname.text = dataSnapshot.child("projectName").value.toString()
 
 
+                spinner3.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                        println("onItemSelected position Main = $position id = $id")
+                        phase = id
+                        println("------phase-------$phase")
+                        //  loadTaskList()
 
+                        obj.phase = phase
 
+                        container.adapter.notifyDataSetChanged()
+                    }
 
+                    override fun onNothingSelected(parent: AdapterView<*>) {
 
-
-
+                    }
+                }
 
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -194,22 +205,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         _dbuser.child(uid).addValueEventListener(_projectListener)
 
 
-        spinner3.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                println("onItemSelected position Main = $position id = $id")
-                phase = id
-                println("------phase-------$phase")
 
-
-                container.adapter.notifyDataSetChanged()
-
-
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-
-            }
-        }
 
 
 
@@ -222,6 +218,9 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
 
         // enabling Toolbar bar app icon and behaving it as toggle button
+/*
+        var fragment = supportFragmentManager.getFragment() as WebViewFragment
+        fragment.loadTaskList(DataSnapshot, phase)*/
 
 
 

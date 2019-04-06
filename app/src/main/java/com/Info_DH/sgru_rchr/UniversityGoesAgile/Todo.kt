@@ -35,7 +35,8 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class Todo : Fragment() {
+class Todo : Fragment(), PhasenListener {
+
     // TODO: Rename and change types of parameters
     lateinit var _dbuser: DatabaseReference
     lateinit var _dbprojekt: DatabaseReference
@@ -52,6 +53,7 @@ class Todo : Fragment() {
     lateinit var _adapter: TaskAdapter
     var phasenindikator:Long? = 0
     var zwei:Long = 2
+  //  var phase: Long = 1
     lateinit var meinspinner: Spinner
 
 
@@ -71,7 +73,7 @@ class Todo : Fragment() {
             val fragment = Todo()
             val args = Bundle()
             args.putInt(ARG_SECTION_NUMBER, sectionNumber)
-            args.putLong(ARG_Phasen_NUMBER, phase)
+         //   args.putLong(ARG_Phasen_NUMBER, phase)
             fragment.arguments = args
             return fragment
         }
@@ -152,7 +154,7 @@ class Todo : Fragment() {
     }
 
 
-    private fun loadTaskList(dataSnapshot: DataSnapshot) {
+     fun loadTaskList(dataSnapshot: DataSnapshot) {
 
 
 
@@ -164,7 +166,7 @@ class Todo : Fragment() {
         //Check if current database contains any collection
         if (tasks.hasNext()) {
 
-            _taskList!!.clear()
+            _taskList?.clear()
 
 
             val listIndex = tasks.next()
@@ -188,10 +190,10 @@ class Todo : Fragment() {
                 task.assignee = map.get("assignee") as String?
                 task.phase = map.get("phase") as Long
 
-                println("testtesttest:::::: ${phasenindikator}")
+              //  println("testtesttest:::::: ${phasenindikator}")
 
                 //task.edit = map.get("edit") as String?
-                if(task.phase == phasenindikator) {
+                if(task.phase == phase) {
                     if (arguments.get("section_number") == 1) {
                         if (task.assignee == "leer" && task.done == false) {
                             _taskList!!.add(task)
