@@ -35,7 +35,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class Todo : Fragment(), PhasenListener {
+class Todo : Fragment() {
 
     // TODO: Rename and change types of parameters
     lateinit var _dbuser: DatabaseReference
@@ -53,7 +53,7 @@ class Todo : Fragment(), PhasenListener {
     lateinit var _adapter: TaskAdapter
     var phasenindikator:Long? = 0
     var zwei:Long = 2
-  //  var phase: Long = 1
+    var phase: Long = 1
     lateinit var meinspinner: Spinner
 
 
@@ -73,7 +73,7 @@ class Todo : Fragment(), PhasenListener {
             val fragment = Todo()
             val args = Bundle()
             args.putInt(ARG_SECTION_NUMBER, sectionNumber)
-         //   args.putLong(ARG_Phasen_NUMBER, phase)
+            args.putLong(ARG_Phasen_NUMBER, phase)
             fragment.arguments = args
             return fragment
         }
@@ -192,8 +192,10 @@ class Todo : Fragment(), PhasenListener {
 
               //  println("testtesttest:::::: ${phasenindikator}")
 
+                println("Die Phasen Nummer ist folgendes 2#######2 ${arguments.get("phasen_number")}")
+
                 //task.edit = map.get("edit") as String?
-                if(task.phase == phase) {
+                if(task.phase == arguments.get("phasen_number")) {
                     if (arguments.get("section_number") == 1) {
                         if (task.assignee == "leer" && task.done == false) {
                             _taskList!!.add(task)

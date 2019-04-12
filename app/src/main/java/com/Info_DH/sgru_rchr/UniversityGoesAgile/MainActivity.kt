@@ -18,6 +18,7 @@ import com.google.firebase.database.*
 import android.support.v4.widget.DrawerLayout
 
 import android.support.design.widget.NavigationView
+import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
@@ -33,7 +34,7 @@ import kotlinx.android.synthetic.main.app_bar_drawer.*
 import kotlinx.android.synthetic.main.content_drawer.*
 
 
-class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavigationItemSelectedListener  {
 
 
     lateinit var _dbuser: DatabaseReference
@@ -205,11 +206,6 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         _dbuser.child(uid).addValueEventListener(_projectListener)
 
 
-
-
-
-
-
         fab!!.setOnClickListener { view ->
 
             val dialog = AddTask.newInstance(title= "Neue Aufgabe hinzufügen", hint = "Name der Aufgabe", phasenlist = arrayList)
@@ -221,12 +217,6 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 /*
         var fragment = supportFragmentManager.getFragment() as WebViewFragment
         fragment.loadTaskList(DataSnapshot, phase)*/
-
-
-
-
-
-
     }
 
     override fun onBackPressed() {
@@ -242,12 +232,11 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
      * A [FragmentPagerAdapter] that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+    inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-
+            println("Die Phasen Nummer ist folgendes 1#######1 ${phase}")
             return Todo.newInstance(position + 1, phase)
         }
 
@@ -300,9 +289,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                     var nickWert2 = nickWert.getValue().toString()
                     println("NICKWERT:$nickWert")
                     zsFassung(nickWert2, objectId)
-
                 }
-
             }
 
             _dbuser.child(nameIdent).addValueEventListener(_nameListener)
