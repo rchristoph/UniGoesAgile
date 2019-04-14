@@ -193,8 +193,11 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                 projektIdent = snapshot.child("ProjektId").value.toString()
                 println("Die Projektident vorm Funktionsstart ist: $projektIdent")
                 println("Meine uid ist: $uid")
-                username.text = "${snapshot.child("username").value.toString()}"
-                nickname.text = "${snapshot.child("nickName").value.toString()} (Nickname)"
+                username.text = "${snapshot.child("name").value.toString()}"
+                nickname.text = "${snapshot.child("Name").child("Nickname").value.toString()} (Nickname)"
+                nickWert2 = snapshot.child("Name").child("Nickname").value.toString()
+
+
                 if (snapshot.value == null){
                     startChoose()
                 }
@@ -272,7 +275,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
     }
 
     override fun onTaskAssign(objectId: String) {
-        _dbuser = FirebaseDatabase.getInstance().getReference("Names").child(uid)
+/*        _dbuser = FirebaseDatabase.getInstance().getReference("Names").child(uid)
         if (nickWert2.isEmpty()) {
 
             var _nameListener = object : ValueEventListener {
@@ -285,7 +288,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                     nameIdent = snapshot.value.toString()
                     println("Die Name ident vorm Funktionsstart ist: $nameIdent")
                     println("Meine uid ist: $uid")
-                    var nickWert = snapshot.child("nickName")
+                    var nickWert = snapshot.child("Name").child("Nickname")
                     var nickWert2 = nickWert.getValue().toString()
                     println("NICKWERT:$nickWert")
                     zsFassung(nickWert2, objectId)
@@ -295,13 +298,16 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
             _dbuser.child(nameIdent).addValueEventListener(_nameListener)
         } else {
             zsFassung(nickWert2, objectId)
-        }
+        }*/
+
+        zsFassung(nickWert2, objectId)
     }
 
     private fun zsFassung (nickWert:String, objectId: String) {
 
         var stelle = _dbprojekt.child(projektIdent).child("tasks/task").child(objectId).child("assignee")
         stelle.setValue(nickWert)
+
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
@@ -343,9 +349,6 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
               return true
         }
             return super.onOptionsItemSelected(item)
-
-
-
 
     }
 

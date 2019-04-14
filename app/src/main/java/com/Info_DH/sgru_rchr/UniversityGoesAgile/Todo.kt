@@ -156,8 +156,6 @@ class Todo : Fragment() {
 
      fun loadTaskList(dataSnapshot: DataSnapshot) {
 
-
-
         Log.d("ToDoActivity", "loadTaskList")
 
         val tasks = dataSnapshot.children.iterator()
@@ -174,7 +172,6 @@ class Todo : Fragment() {
 
             //check if the collection has any task or not
             while (itemsIterator.hasNext()) {
-
 
                 //get current task
                 val currentItem = itemsIterator.next()
