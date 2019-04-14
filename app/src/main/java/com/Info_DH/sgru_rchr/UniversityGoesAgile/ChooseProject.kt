@@ -48,7 +48,7 @@ class ChooseProject : AppCompatActivity() {
             createBtn.visibility = View.VISIBLE
             showDate.visibility = View.VISIBLE
             datePicker.visibility = View.VISIBLE
-            newtextview.visibility = View.VISIBLE
+            nickname.visibility = View.VISIBLE
         }
 
         joinExist.setOnClickListener {
@@ -65,7 +65,7 @@ class ChooseProject : AppCompatActivity() {
             createBtn.visibility = View.GONE
             showDate.visibility = View.GONE
             datePicker.visibility = View.GONE
-            newtextview.visibility = View.GONE
+            nickname.visibility = View.GONE
         }
 
 
