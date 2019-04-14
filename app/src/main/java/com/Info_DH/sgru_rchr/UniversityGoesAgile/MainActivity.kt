@@ -16,17 +16,23 @@ import com.google.firebase.database.*
 import android.support.v4.widget.DrawerLayout
 
 import android.support.design.widget.NavigationView
+import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.*
+import android.webkit.WebViewFragment
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import kotlinx.android.synthetic.main.activity_add_task.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_drawer.*
 import kotlinx.android.synthetic.main.app_bar_drawer.*
 import kotlinx.android.synthetic.main.content_drawer.*
 
 
-class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavigationItemSelectedListener  {
 
 
     lateinit var _dbuser: DatabaseReference
@@ -38,8 +44,13 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
     var projektIdent:String = ""
     private var shareActionProvider: ShareActionProvider? = null
     var _taskList: MutableList<Task>? = null
+    var _phasenList: MutableList<Task>? = null
     var nameIdent : String = ""
     var nickWert2: String  = ""
+    lateinit var stageList: MutableList<Phasen>
+    lateinit var arrayList: ArrayList<String>
+    var phase:Long = 0
+    val obj = Todo()
 
     lateinit var _adapter: TaskAdapter
 
@@ -51,6 +62,9 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        stageList = mutableListOf()
+        arrayList = arrayListOf()
+
 
 
         _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
@@ -66,7 +80,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this@MainActivity)
 
-       // setSupportActionBar(toolbar)
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
@@ -77,12 +91,50 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
 
-        fab!!.setOnClickListener { view ->
+        var _spinnerlistener = object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
 
-            val dialog = AddTask.newInstance(title= "Neue Aufgabe hinzufügen", hint = "Name der Aufgabe")
-            dialog.show(supportFragmentManager, "editDescription")
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-    }
+                // loadPhasenList(dataSnapshot)
+                if (dataSnapshot.child("Stages")!!.exists()) {
+
+
+
+
+                    stageList!!.clear()
+                    arrayList!!.clear()
+
+                    for (h in dataSnapshot.child("Stages").child("Stage").children) {
+                        val stage = h.getValue(Phasen::class.java)
+                        println(h.getValue().toString())
+                        stageList.add(stage!!)
+                        //    arrayList.add(dataSnapshot.child("Stages").child("Stage").child("-Lb5FqD2R9NezzOIiZwU").child("stageName").value.toString())
+                        arrayList.add(stage!!.stageName)
+                        println("Stage.stageName = ${stage.stageName}")
+
+
+                        println("stage::::::::$stage")
+
+
+                    }
+                    println("stagelist:::::: ${stageList}")
+                    println("ArrayList:::: $arrayList")
+
+                    var aa = ArrayAdapter(this@MainActivity, android.R.layout.simple_spinner_item, arrayList)
+                    aa.notifyDataSetChanged()
+                    aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spinner3?.adapter = aa
+
+                }
+
+            }
+
+        }
+
+
 
         //get all Tasks from Database
         var _taskListener = object : ValueEventListener {
@@ -98,9 +150,28 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                 drawer_layout.addDrawerListener(toggle)
                 toggle.syncState()
                 nav_view.setNavigationItemSelectedListener(this@MainActivity)
+                projektname.text = dataSnapshot.child("projectName").value.toString()
 
                 //Get Name of project
                 projektname.text = dataSnapshot.child("projectName").value.toString()
+
+                spinner3.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                        println("onItemSelected position Main = $position id = $id")
+                        phase = id
+                        println("------phase-------$phase")
+                        //  loadTaskList()
+
+                        obj.phase = phase
+
+                        container.adapter.notifyDataSetChanged()
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>) {
+
+                    }
+                }
+
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -118,21 +189,35 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
             override fun onDataChange(snapshot: DataSnapshot) {
                 println("Der  Wert ist: ${snapshot.value}")
                 projektIdent = snapshot.child("ProjektId").value.toString()
-                username.text = "${snapshot.child("username").value.toString()}"
-                newtextview.text = "${snapshot.child("nickName").value.toString()} (Nickname)"
+                println("Die Projektident vorm Funktionsstart ist: $projektIdent")
+                println("Meine uid ist: $uid")
+                username.text = "${snapshot.child("name").value.toString()}"
+                nickname.text = "${snapshot.child("Name").child("Nickname").value.toString()} (Nickname)"
+                nickWert2 = snapshot.child("Name").child("Nickname").value.toString()
+
+
                 if (snapshot.value == null){
                     startChoose()
                 }
                 _dbprojekt.child(projektIdent).orderByKey().addValueEventListener(_taskListener)
+                _dbprojekt.child(projektIdent).orderByKey().addListenerForSingleValueEvent(_spinnerlistener)
             }
         }
 
         _dbuser.child(uid).addValueEventListener(_projectListener)
 
 
+        fab!!.setOnClickListener { view ->
+
+            val dialog = AddTask.newInstance(title= "Neue Aufgabe hinzufügen", hint = "Name der Aufgabe", phasenlist = arrayList)
+            dialog.show(supportFragmentManager, "editDescription")
+        }
+
+
         // enabling Toolbar bar app icon and behaving it as toggle button
-
-
+/*
+        var fragment = supportFragmentManager.getFragment() as WebViewFragment
+        fragment.loadTaskList(DataSnapshot, phase)*/
     }
 
     override fun onBackPressed() {
@@ -148,17 +233,22 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
      * A [FragmentPagerAdapter] that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+    inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return Todo.newInstance(position + 1)
+            println("Die Phasen Nummer ist folgendes 1#######1 ${phase}")
+            return Todo.newInstance(position + 1, phase)
         }
 
         override fun getCount(): Int {
             // Show 3 total pages.
             return 3
+
+        }
+
+        override fun getItemPosition(`object`: Any?): Int {
+            return POSITION_NONE
         }
     }
 
@@ -187,9 +277,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
     //If user assigns a task to himself
     override fun onTaskAssign(objectId: String) {
-        _dbuser = FirebaseDatabase.getInstance().getReference("Names").child(uid)
-
-        //Before I assign at first, nickWert2 will be empty
+/*        _dbuser = FirebaseDatabase.getInstance().getReference("Names").child(uid)
         if (nickWert2.isEmpty()) {
 
             var _nameListener = object : ValueEventListener {
@@ -202,8 +290,8 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                     nameIdent = snapshot.value.toString()
                     println("Die Name ident vorm Funktionsstart ist: $nameIdent")
                     println("Meine uid ist: $uid")
-                    var nickWert = snapshot.child("nickName")
-                    nickWert2 = nickWert.getValue().toString()
+                    var nickWert = snapshot.child("Name").child("Nickname")
+                    var nickWert2 = nickWert.getValue().toString()
                     println("NICKWERT:$nickWert")
                     zsFassung(nickWert2, objectId)
                 }
@@ -212,7 +300,9 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
             _dbuser.child(nameIdent).addValueEventListener(_nameListener)
         } else {
             zsFassung(nickWert2, objectId)
-        }
+        }*/
+
+        zsFassung(nickWert2, objectId)
     }
 
     //Write the assigned user to the DB
@@ -220,6 +310,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
         var stelle = _dbprojekt.child(projektIdent).child("tasks/task").child(objectId).child("assignee")
         stelle.setValue(nickWert)
+
     }
 
     //Menu to sign out, share or change project
@@ -258,9 +349,6 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
               return true
         }
             return super.onOptionsItemSelected(item)
-
-
-
 
     }
 
@@ -309,6 +397,62 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
+
+/*    private fun loadPhasenList(dataSnapshot: DataSnapshot) {
+        Log.d("ToDoActivity", "loadTaskList")
+
+        val tasks = dataSnapshot.children.iterator()
+        println("Das ist das Task Objekt: $tasks")
+
+        //Check if current database contains any collection
+        if (tasks.hasNext()) {
+
+            _taskList!!.clear()
+
+
+            val listIndex = tasks.next()
+            val itemsIterator = listIndex.children.iterator()
+
+            //check if the collection has any task or not
+            while (itemsIterator.hasNext()) {
+
+
+                //get current task
+                val currentItem = itemsIterator.next()
+                val task = Task.create()
+
+                //get current data in a map
+                val map = currentItem.getValue() as HashMap<String, Any>
+
+                //key will return the Firebase ID
+                task.objectId = currentItem.key
+                task.done = map.get("done") as Boolean?
+                task.taskDesc = map.get("taskDesc") as String?
+                task.assignee = map.get("assignee") as String?
+
+                //task.edit = map.get("edit") as String?
+*//*                if(arguments.get("section_number")== 1) {
+                    if (task.assignee == "leer"&&task.done == false) {
+                        _taskList!!.add(task)
+                    }
+                }
+                else if(arguments.get("section_number")== 2) {
+                    if (task.assignee != "leer"&& task.done == false) {
+                        _taskList!!.add(task)
+                    }
+                }
+                else if(arguments.get("section_number")== 3) {
+                    if (task.done == true) {
+                        _taskList!!.add(task)
+                    }*//*
+                }
+            }
+        }
+        //alert adapter that has changed
+    //    _adapter.notifyDataSetChanged()
+    //}*/
+
+
 }
 
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
+             xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:layout_marginLeft="-5dp"
              android:layout_marginRight="-5dp"
@@ -23,13 +23,18 @@
                 android:inputType="textCapSentences|textNoSuggestions"
         />
 
+        <TextView
+                android:text="Phase wählen:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/textView7" android:layout_weight="1"
+                android:paddingTop="20dp" android:textColorLink="@android:color/black"
+                android:textAppearance="@android:style/TextAppearance.Material.Widget.PopupMenu.Large"/>
         <Spinner
                 android:id="@+id/spinner2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spinner"
-                android:layout_margin="10dp"
-                android:entries="@array/city_list" />
+                android:layout_margin="10dp"/>
+
 
     </android.support.design.widget.TextInputLayout>
 </FrameLayout>
