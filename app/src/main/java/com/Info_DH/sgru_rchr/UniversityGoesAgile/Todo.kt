@@ -10,10 +10,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ListView
+import android.widget.Spinner
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -33,6 +36,7 @@ private const val ARG_PARAM2 = "param2"
  *
  */
 class Todo : Fragment() {
+
     // TODO: Rename and change types of parameters
     lateinit var _dbuser: DatabaseReference
     lateinit var _dbprojekt: DatabaseReference
@@ -47,6 +51,10 @@ class Todo : Fragment() {
     var nickWert2: String  = ""
     private var listener: OnFragmentInteractionListener? = null
     lateinit var _adapter: TaskAdapter
+    var phasenindikator:Long? = 0
+    var zwei:Long = 2
+    var phase: Long = 1
+    lateinit var meinspinner: Spinner
 
 
     companion object {
@@ -55,15 +63,17 @@ class Todo : Fragment() {
          * fragment.
          */
         private val ARG_SECTION_NUMBER = "section_number"
+        private val ARG_Phasen_NUMBER = "phasen_number"
 
         /**
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        fun newInstance(sectionNumber: Int): Todo {
+        fun newInstance(sectionNumber: Int, phase: Long): Todo {
             val fragment = Todo()
             val args = Bundle()
             args.putInt(ARG_SECTION_NUMBER, sectionNumber)
+            args.putLong(ARG_Phasen_NUMBER, phase)
             fragment.arguments = args
             return fragment
         }
@@ -78,6 +88,7 @@ class Todo : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+         phasenindikator = arguments?.getLong(ARG_Phasen_NUMBER)
 
             println("die Sektionsnummer ist: ${arguments.get("section_number")} ")
 
@@ -130,9 +141,12 @@ class Todo : Fragment() {
         println("das ist _dbproject: $_taskListener")
 
 
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_todo, container, false)
     }
+
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -140,7 +154,8 @@ class Todo : Fragment() {
     }
 
 
-    private fun loadTaskList(dataSnapshot: DataSnapshot) {
+     fun loadTaskList(dataSnapshot: DataSnapshot) {
+
         Log.d("ToDoActivity", "loadTaskList")
 
         val tasks = dataSnapshot.children.iterator()
@@ -149,7 +164,7 @@ class Todo : Fragment() {
         //Check if current database contains any collection
         if (tasks.hasNext()) {
 
-            _taskList!!.clear()
+            _taskList?.clear()
 
 
             val listIndex = tasks.next()
@@ -157,7 +172,6 @@ class Todo : Fragment() {
 
             //check if the collection has any task or not
             while (itemsIterator.hasNext()) {
-
 
                 //get current task
                 val currentItem = itemsIterator.next()
@@ -171,24 +185,34 @@ class Todo : Fragment() {
                 task.done = map.get("done") as Boolean?
                 task.taskDesc = map.get("taskDesc") as String?
                 task.assignee = map.get("assignee") as String?
+                task.phase = map.get("phase") as Long
+
+              //  println("testtesttest:::::: ${phasenindikator}")
+
+                println("Die Phasen Nummer ist folgendes 2#######2 ${arguments.get("phasen_number")}")
 
                 //task.edit = map.get("edit") as String?
-                if(arguments.get("section_number")== 1) {
-                    if (task.assignee == "leer"&&task.done == false) {
-                        _taskList!!.add(task)
+                if(task.phase == arguments.get("phasen_number")) {
+                    if (arguments.get("section_number") == 1) {
+                        if (task.assignee == "leer" && task.done == false) {
+                            _taskList!!.add(task)
+                            println("_taskList: $_taskList")
+                        }
+                    } else if (arguments.get("section_number") == 2) {
+                        if (task.assignee != "leer" && task.done == false) {
+                            _taskList!!.add(task)
+                        }
+                    } else if (arguments.get("section_number") == 3) {
+                        if (task.done == true) {
+                            _taskList!!.add(task)
+                        }
                     }
                 }
-                else if(arguments.get("section_number")== 2) {
-                    if (task.assignee != "leer"&& task.done == false) {
-                        _taskList!!.add(task)
-                    }
-                }
-                else if(arguments.get("section_number")== 3) {
-                    if (task.done == true) {
-                        _taskList!!.add(task)
-                    }
-                }
+
+
             }
+            println("_taskList = $_taskList")
+
         }
         //alert adapter that has changed
         _adapter.notifyDataSetChanged()
@@ -196,20 +220,6 @@ class Todo : Fragment() {
 
 
 
-
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
     interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)

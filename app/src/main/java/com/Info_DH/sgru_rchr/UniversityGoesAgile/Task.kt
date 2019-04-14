@@ -10,4 +10,7 @@ class Task {
     var author: String? = null
     var edit: String? = null
     var assignee: String? = null
+    var phase: Long = 0
+
+
 }
