@@ -39,8 +39,19 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(Intent(this, register::class.java))
                 }
             }
-    }
 
+
+        val loginBtn = findViewById<View>(R.id.loginBtn) as Button
+        val registerTxt = findViewById<View>(R.id.regTxt) as TextView
+
+        //Choose between login functionality and Register-Activity
+        loginBtn.setOnClickListener(View.OnClickListener { view ->
+            login()
+        })
+        registerTxt.setOnClickListener{
+            startActivity(Intent(this, register::class.java))
+        }
+    }
 
     private fun login () {
         //Save Input in variables

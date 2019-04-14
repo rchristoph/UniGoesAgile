@@ -16,20 +16,44 @@ import kotlinx.android.synthetic.main.activity_choose_project.*
 
 class chooseNickname : AppCompatActivity() {
 
-    lateinit var mDatabase : DatabaseReference
+    lateinit var mDatabase: DatabaseReference
     lateinit var realDatabase: DatabaseReference
     val mAuth = FirebaseAuth.getInstance()
-    var cities = arrayOf("Wähle eine Stadt", "Bangkok", "London", "Paris", "Sydney", "New York", "Istanbul", "Dubai", "Hanoi", "Hongkong", "Barcelona")
-    var animals = arrayOf("Wähle ein Tier", "Bär", "Giraffe", "Eule", "Löwe", "Kranich", "Wiesel", "Okapi", "Wolf", "Robbe")
-    var politic = arrayOf("Wähle PolitikerIn", "Merkel", "Obama", "May", "Macron", "Putin", "Orban", "Solberg", "Arden", "Abe")
-    var history = arrayOf("Wähle eine Epoche", "Steinzeit", "Klassik", "Moderne", "Realismus", "Antike", "Aufklärung", "Renaissance")
+    var cities = arrayOf(
+        "Wähle eine Stadt",
+        "Bangkok",
+        "London",
+        "Paris",
+        "Sydney",
+        "New York",
+        "Istanbul",
+        "Dubai",
+        "Hanoi",
+        "Hongkong",
+        "Barcelona"
+    )
+    var animals =
+        arrayOf("Wähle ein Tier", "Bär", "Giraffe", "Eule", "Löwe", "Kranich", "Wiesel", "Okapi", "Wolf", "Robbe")
+    var politic =
+        arrayOf("Wähle PolitikerIn", "Merkel", "Obama", "May", "Macron", "Putin", "Orban", "Solberg", "Arden", "Abe")
+    var history = arrayOf(
+        "Wähle eine Epoche",
+        "Steinzeit",
+        "Klassik",
+        "Moderne",
+        "Realismus",
+        "Antike",
+        "Aufklärung",
+        "Renaissance"
+    )
     var strings = arrayOf("")
     var selectTheme: String = ""
     val user = mAuth.currentUser
     val uid = user!!.uid
     var projectTheme: String = ""
     val _dbuser = FirebaseDatabase.getInstance().getReference("Names")
-    var proID: String=""
+    var proID: String = ""
+    var status: String = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,12 +65,7 @@ class chooseNickname : AppCompatActivity() {
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Names")
         realDatabase = FirebaseDatabase.getInstance().getReference("Projects")
-        val status = intent.getStringExtra("status")
-        if (status=="true") {
-            textView10.visibility = View.VISIBLE
-            selectedBtn.visibility = View.VISIBLE
-            spinner3.visibility = View.VISIBLE
-        }
+        status = intent.getStringExtra("status")
 
 
         //Hier brauche ich einen Datasnapshot
@@ -55,14 +74,16 @@ class chooseNickname : AppCompatActivity() {
                 println("bin jetzt hier!!!!, das ist mein Snapshot:$snapshot")
                 var newVal123 = snapshot.child(proID).child("theme").value.toString()
                 println("1636: $newVal123")
-                if (status=="false"){
-                println("STATUS ist falsch")
+                if (status == "false") {
+                    println("STATUS ist falsch")
                     themeSelector(newVal123)
 
+                } else {
+                    textView10.visibility = View.VISIBLE
+                    selectedBtn.visibility = View.VISIBLE
+                    spinner3.visibility = View.VISIBLE
+                    themeAdapt()
                 }
-             else {
-                themeAdapt()
-            }
 
             }
 
@@ -98,74 +119,88 @@ class chooseNickname : AppCompatActivity() {
         })
 
 
-
-
-
     }
 
 
-    private fun saveNickName(projectID: String){
-        var nickNameTxt = findViewById<View>(R.id.spinner1) as Spinner
-        var themeTxt = findViewById<View>(R.id.spinner3) as Spinner
-        val nickName = nickNameTxt.selectedItem.toString()
-        val theme = themeTxt.selectedItem.toString()
+    private fun saveNickName(projectID: String) {
+        if (status == "true") {
+            var nickNameTxt = findViewById<View>(R.id.spinner1) as Spinner
+            var themeTxt = findViewById<View>(R.id.spinner3) as Spinner
+            val nickName = nickNameTxt.selectedItem.toString()
+            val theme = themeTxt.selectedItem.toString()
 
-        if (!nickName.isEmpty() && !theme.isEmpty()){
-            val user = mAuth.currentUser
-            val uid = user!!.uid
-            mDatabase.child(uid).child("nickname").setValue(nickName)
-            realDatabase.child(projectID).child("theme").setValue(selectTheme)
-            val newValue = realDatabase.child(projectID).child("members")
-            val nName = Members(nickName)
-            newValue.child(uid).setValue(nName)
+            if (!nickName.isEmpty() && !theme.isEmpty()) {
+                val user = mAuth.currentUser
+                val uid = user!!.uid
+                mDatabase.child(uid).child("nickname").setValue(nickName)
+                realDatabase.child(projectID).child("theme").setValue(selectTheme)
+                val newValue = realDatabase.child(projectID).child("members")
+                val nName = Members(nickName)
+                newValue.child(uid).setValue(nName)
 
-            newValue.child(nickName)
+                newValue.child(nickName)
 
-            /*val newValue = ref.child("Stages").child("Stage")
-            stageId = newValue.push().key.toString()
-            val stage = Stage(stageName, start, ende, stageId)
-            newValue.child(stageId).setValue(stage)
-            Toast.makeText(applicationContext, "StageSaved!", Toast.LENGTH_LONG).show()*/
+                startActivity(Intent(this, MainActivity::class.java))
 
-            startActivity(Intent(this, MainActivity::class.java))
+            }
+        } else {
+            var nickNameTxt = findViewById<View>(R.id.spinner1) as Spinner
+            val nickName = nickNameTxt.selectedItem.toString()
+
+            if (!nickName.isEmpty()) {
+                val user = mAuth.currentUser
+                val uid = user!!.uid
+                mDatabase.child(uid).child("nickname").setValue(nickName)
+                val newValue = realDatabase.child(projectID).child("members")
+                val nName = Members(nickName)
+                newValue.child(uid).setValue(nName)
+
+                newValue.child(nickName)
+
+                startActivity(Intent(this, MainActivity::class.java))
+            }
 
         }
-
     }
 
-    //Prüfe ob es bereits ein Theme gibt
-    private fun themeAdapt() {
-        //Das bedeutet dass es noch kein Theme gibt weil der User das Projekt gerade neu angelegt hat
-        val allThemes = arrayOf("", "Städte", "Tiere", "Politik", "Epochen")
+        //Prüfe ob es bereits ein Theme gibt
+        private fun themeAdapt() {
+            //Das bedeutet dass es noch kein Theme gibt weil der User das Projekt gerade neu angelegt hat
+            val allThemes = arrayOf("", "Städte", "Tiere", "Politik", "Epochen")
 
-        val adapter2 = ArrayAdapter(this, android.R.layout.simple_spinner_item, allThemes)
-        // Specify the layout to use when the list of choices appears
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // Apply the adapter to the spinner
-        spinner3.adapter = adapter2
+            val adapter2 = ArrayAdapter(this, android.R.layout.simple_spinner_item, allThemes)
+            // Specify the layout to use when the list of choices appears
+            adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner3.adapter = adapter2
 
 
-        selectedBtn.setOnClickListener {
-            selectTheme = spinner3.selectedItem.toString()
-            println("SelectThem:$selectTheme")
+            selectedBtn.setOnClickListener {
+                selectTheme = spinner3.selectedItem.toString()
+                println("SelectThem:$selectTheme")
 
-            themeSelector(selectTheme)
-        }}
+                themeSelector(selectTheme)
+            }
+        }
 
-    private fun themeSelector(selectTheme: String) {
-        if(selectTheme=="Städte") {
-            strings = cities
-        }else if(selectTheme=="Tiere"){
-            strings = animals}else if(selectTheme=="Politik"){
-            strings = politic} else{
-            strings = history}
-        println("Hier die Strings:$strings")
+        private fun themeSelector(selectTheme: String) {
+            if (selectTheme == "Städte") {
+                strings = cities
+            } else if (selectTheme == "Tiere") {
+                strings = animals
+            } else if (selectTheme == "Politik") {
+                strings = politic
+            } else {
+                strings = history
+            }
+            println("Hier die Strings:$strings")
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, strings)
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // Apply the adapter to the spinner
-        spinner1.adapter = adapter
-    }
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, strings)
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner1.adapter = adapter
+        }
+
 
 }

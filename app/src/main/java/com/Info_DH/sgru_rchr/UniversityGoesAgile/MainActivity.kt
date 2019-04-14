@@ -127,7 +127,6 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                     aa.notifyDataSetChanged()
                     aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spinner3?.adapter = aa
-
                 }
 
             }
@@ -193,7 +192,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                 println("Meine uid ist: $uid")
                 username.text = "${snapshot.child("name").value.toString()}"
                 nickname.text = "${snapshot.child("Name").child("Nickname").value.toString()} (Nickname)"
-                nickWert2 = snapshot.child("Name").child("Nickname").value.toString()
+                nickWert2 = snapshot.child("nickname").value.toString()
 
 
                 if (snapshot.value == null){
