@@ -9,8 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_choose_project.*
 import java.util.*
 
@@ -20,6 +19,8 @@ class ChooseProject : AppCompatActivity() {
     lateinit var _db: DatabaseReference
     lateinit var mDatabase: DatabaseReference
     var mAuth = FirebaseAuth.getInstance()
+    var status: String = "false"
+
 
 
 
@@ -92,7 +93,7 @@ class ChooseProject : AppCompatActivity() {
         //An einem vorhandenen Projekt teilnehmen
             joinButton.setOnClickListener(View.OnClickListener {
                 val projectId = findViewById<View>(R.id.projectid) as TextView
-                var textfield = projectId.text.toString()
+                val textfield = projectId.text.toString()
                 if (!textfield.isEmpty()) {
                     joinProject()
                 }
@@ -119,20 +120,58 @@ class ChooseProject : AppCompatActivity() {
         val user = mAuth.currentUser
         val uid = user!!.uid
         mDatabase.child(uid).child("ProjektId").setValue(projectID.text.toString())
-        startActivity(Intent(this, MainActivity::class.java))
+        val newValue = _db.child(projectID.text.toString()).child("members")
+        val nName = Members("")
+        newValue.child(uid).setValue(nName)
+
+        //hier muss ich jetzt prüfen ob der User im Projekt schon als Member dabei ist. Wenn ja kann das Projekt direkt aufgerufen werden. Wenn nicht muss ich erstmal einen Nickname auswählen
+
+        var _mmber = object : ValueEventListener {
+
+            override fun onDataChange(p0: DataSnapshot) {
+
+                println("Das ist mein SnapshotNeu:${p0.children}")
+                println("Das sind meine Snapshots:${p0.child("members").value}")
+                var findMember = p0.child("members")
+                println("Member1:$findMember")
+                if (findMember!!.exists()) {
+                    for (h in findMember.children) {
+                        var member = h.getValue(Members::class.java).toString()
+                        println("Hier sind meine Member:$member")
+                        }
+                    }
+                }
+
+            override fun onCancelled(p0: DatabaseError) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+        }
+        _db.child(projectID.text.toString()).addValueEventListener(_mmber)
+
+        val prjctID = projectID.text.toString()
+        println("Das ist der prjctID-String: $prjctID")
+
+        val dataBaseEntry = mDatabase.child(uid).child("Projekte")
+        val newPrjct = ProjectShort (prjctID)
+        dataBaseEntry.child(prjctID).setValue(newPrjct)
+        status = "false"
+
+        val intent = Intent(this@ChooseProject, chooseNickname::class.java)
+        intent.putExtra("status", status)
+        startActivity(intent)
     }
 
     private fun createProject(){
 
         // An dieser Stelle wird die Klasse "Project" verknüpft
         val project = Project.create()
-
         val projectID = findViewById<View>(R.id.projectTxt) as TextView
 
         //Übergebe die vom User eingegebenen Daten an die Klasse
         project.projectName = projectID.text.toString()
         project.deadLine = showDate.text.toString()
-        project.theme = ""
+        project.theme = "leer"
 
         //Schreibe die Daten in die DB
         val newProject = _db.push()
@@ -147,17 +186,28 @@ class ChooseProject : AppCompatActivity() {
         val uid = user!!.uid
         mDatabase.child(uid).child("ProjektId").setValue(project.objectId)
         mDatabase.child(uid).child("ProjektName").setValue(project.projectName)
+        val pro = mDatabase.child(uid).child("Projekte")
+        pro.setValue(project.objectId)
+
 
         //Lege die Struktur Tasks/Task an. Dort werden später die Aufgaben gespeichert
         _db.child(project.objectId.toString()).child("tasks").child("task").setValue("")
+        val newValue = _db.child(project.objectId.toString()).child("members")
+        val nName = Members("")
+        newValue.child(uid).setValue(nName)
+        newValue.child(uid).setValue(nName)
 
         Toast.makeText(this, "New Project created successfully " + project.objectId, Toast.LENGTH_SHORT).show()
+
+        //das heißt dass ich der Admin des Projekts bin
+        status="true"
 
         //Gehe zu Activity in der Phasen angelegt werden und übergebe dabei zwei Variablen
         val intent = Intent(this@ChooseProject, setStages::class.java)
         println("Das ist meine objectId:${project.objectId}")
         intent.putExtra("projectID", project.objectId)
         intent.putExtra("deadline", project.deadLine)
+        intent.putExtra("status", status)
         startActivity(intent)
     }
 }

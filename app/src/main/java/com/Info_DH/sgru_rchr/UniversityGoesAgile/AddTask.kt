@@ -78,19 +78,6 @@ class AddTask : android.support.v4.app.DialogFragment() {
         editText = view.findViewById(R.id.editText)
         editText.hint = hint
 
-
-     val adapter = ArrayAdapter.createFromResource(activity,
-            R.array.city_list, android.R.layout.simple_spinner_item)
-
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // Apply the adapter to the spinner
-
-
-
-        spinner2?.adapter = adapter
-
-
         val builder = AlertDialog.Builder(activity!!)
             .setTitle(title)
             .setView(view)

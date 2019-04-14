@@ -50,6 +50,7 @@ class setStages : AppCompatActivity() {
 
         val projectID = intent.getStringExtra("projectID")
         val deadline = intent.getStringExtra("deadline")
+        val status = intent.getStringExtra("status")
 
         stageList = mutableListOf()
         ref = FirebaseDatabase.getInstance().getReference("Projects").child(projectID)
@@ -68,6 +69,7 @@ class setStages : AppCompatActivity() {
         nextBtn1.setOnClickListener {
             val intent = Intent(this, chooseNickname::class.java)
             intent.putExtra("projectID", projectID)
+            intent.putExtra("status", status)
             startActivity(intent)
             }
         }
