@@ -142,18 +142,9 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
             //Firebase delivers its data as a dataSnapshot
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                toolbar.setTitle(dataSnapshot.child("projectName").value.toString())
-                setSupportActionBar(toolbar)
-                val toggle = ActionBarDrawerToggle(
-                    this@MainActivity, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
-                )
-                drawer_layout.addDrawerListener(toggle)
-                toggle.syncState()
-                nav_view.setNavigationItemSelectedListener(this@MainActivity)
-                projektname.text = dataSnapshot.child("projectName").value.toString()
+               /* toolbar.setTitle("${dataSnapshot.child("projectName").value.toString()} | Phase: ${phase+1}/${arrayList.size}")
+                setSupportActionBar(toolbar)*/
 
-                //Get Name of project
-                projektname.text = dataSnapshot.child("projectName").value.toString()
 
                 spinner3.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
@@ -164,6 +155,22 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
                         obj.phase = phase
 
+                        toolbar.setTitle("${dataSnapshot.child("projectName").value.toString()} | Phase: ${phase+1}/${arrayList.size}")
+                        setSupportActionBar(toolbar)
+
+                        val toggle = ActionBarDrawerToggle(
+                            this@MainActivity, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+                        )
+                        drawer_layout.addDrawerListener(toggle)
+                        toggle.syncState()
+                        nav_view.setNavigationItemSelectedListener(this@MainActivity)
+                        projektname.text = dataSnapshot.child("projectName").value.toString()
+
+                        //Get Name of project
+                        projektname.text = dataSnapshot.child("projectName").value.toString()
+
+
+
                         container.adapter.notifyDataSetChanged()
                     }
 
@@ -171,6 +178,8 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
                     }
                 }
+
+
 
             }
 
