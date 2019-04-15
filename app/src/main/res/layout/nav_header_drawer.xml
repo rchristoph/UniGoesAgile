@@ -3,7 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/nav_header_height"
+        android:layout_height="300dp"
         android:background="@drawable/side_nav_bar"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -21,20 +21,20 @@
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.ActionMode.Title.Inverse"
             android:id="@+id/projektname"
             android:textAlignment="viewStart" android:textStyle="italic"
-            android:textColor="@color/colorAccent"/>
-<TextView
+            android:textColor="@color/colorAccent" android:layout_marginTop="40dp"/>
+    <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             android:text="@string/dein_name"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" android:id="@+id/username"
-            android:textSize="30sp" android:textColor="@android:color/white" />
+            android:textSize="30sp" android:textColor="@android:color/white" android:layout_marginTop="20dp"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/dein_nickname"
             android:id="@+id/nickname" android:textSize="24sp" android:textColor="@android:color/white"
-            android:textStyle="bold"/>
+            android:textStyle="bold" android:layout_marginTop="20dp"/>
 
     <Spinner
             android:id="@+id/spinner3"
