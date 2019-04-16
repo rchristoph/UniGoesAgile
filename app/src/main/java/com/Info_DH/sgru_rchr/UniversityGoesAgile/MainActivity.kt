@@ -201,7 +201,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                 println("Meine uid ist: $uid")
                 username.text = "${snapshot.child("name").value.toString()}"
                 nickname.text = "${snapshot.child("Name").child("Nickname").value.toString()} (Nickname)"
-                nickWert2 = snapshot.child("nickname").value.toString()
+                nickWert2 = snapshot.child("Name").child("Nickname").value.toString()
 
 
                 if (snapshot.value == null){
