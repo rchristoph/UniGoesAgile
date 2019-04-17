@@ -200,8 +200,9 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                 println("Die Projektident vorm Funktionsstart ist: $projektIdent")
                 println("Meine uid ist: $uid")
                 username.text = "${snapshot.child("name").value.toString()}"
-                nickname.text = "${snapshot.child("Name").child("Nickname").value.toString()} (Nickname)"
-                nickWert2 = snapshot.child("Name").child("Nickname").value.toString()
+                nickname.text = "${snapshot.child("nickname").value.toString()} (Nickname)"
+                nickWert2 = snapshot.child("nickname").value.toString()
+                println("           Nickwert = $nickWert2")
 
 
                 if (snapshot.value == null){

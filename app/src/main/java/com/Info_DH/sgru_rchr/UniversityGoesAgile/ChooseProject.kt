@@ -34,9 +34,7 @@ class ChooseProject : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choose_project)
 
-        changeActivity2.setOnClickListener {
-            startActivity(Intent(this, changeProject::class.java))
-        }
+
         //Layout Switch: Neues Projekt vs. bestehendem Projekt beitreten
         changeActivity.setOnClickListener {
             textInputLayout4.visibility = View.GONE

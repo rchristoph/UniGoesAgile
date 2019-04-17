@@ -155,7 +155,7 @@
             android:layout_marginEnd="12dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="12dp"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.0"
-            android:layout_marginBottom="52dp" app:layout_constraintBottom_toTopOf="@+id/changeActivity2"/>
+            android:layout_marginBottom="84dp" app:layout_constraintBottom_toTopOf="@+id/changeActivity"/>
     <TextView
             android:text="Create new project"
             android:layout_width="wrap_content"
@@ -169,15 +169,4 @@
             android:textSize="16sp"
             android:visibility="visible" android:layout_marginBottom="96dp"
             app:layout_constraintBottom_toTopOf="@+id/showDate" android:fontFamily="@font/muli"/>
-    <TextView
-            android:text="Change Project"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/changeActivity2"
-            android:includeFontPadding="true"
-            android:textAppearance="@android:style/TextAppearance.Material.WindowTitle"
-            android:textSize="16sp"
-            android:visibility="visible"
-            android:fontFamily="@font/muli"
-            tools:layout_editor_absoluteY="444dp" tools:layout_editor_absoluteX="149dp"/>
 </android.support.constraint.ConstraintLayout>
