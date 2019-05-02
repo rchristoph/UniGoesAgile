@@ -72,7 +72,7 @@
             android:backgroundTint="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@+id/textView3"
             android:background="@drawable/textinput_layout"
-            android:hint="z.B. Phase 1 "/>
+            android:hint="z.B. Phase 1 " android:singleLine="true" android:selectAllOnFocus="true"/>
     <Button
             android:text="Add"
             android:layout_width="0dp"

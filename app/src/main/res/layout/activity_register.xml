@@ -23,7 +23,7 @@
                 android:hint="Name"
                 android:inputType="text" android:layout_width="285dp"
                 android:backgroundTint="#FFFFFF"
-                android:layout_marginLeft="15dp"/>
+                android:layout_marginLeft="15dp" android:singleLine="true"/>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
             android:layout_width="0dp"
@@ -42,7 +42,7 @@
                 android:hint="Email"
                 android:inputType="textEmailAddress|textWebEmailAddress"
                 android:backgroundTint="#FFFFFF"
-                android:layout_marginLeft="15dp"/>
+                android:layout_marginLeft="15dp" android:singleLine="true"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -64,7 +64,7 @@
                 android:hint="Password"
                 android:inputType="textPassword|textWebPassword"
                 android:backgroundTint="#FFFFFF"
-                android:layout_marginLeft="15dp"/>
+                android:layout_marginLeft="15dp" android:singleLine="true"/>
     </android.support.design.widget.TextInputLayout>
 
     <Button

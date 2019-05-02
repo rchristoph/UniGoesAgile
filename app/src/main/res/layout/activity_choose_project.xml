@@ -43,7 +43,7 @@
                 android:id="@+id/projectTxt" android:visibility="visible"
                 android:layout_marginLeft="15dp"
                 android:backgroundTint="#FFFFFF"
-        />
+                android:singleLine="true"/>
     </android.support.design.widget.TextInputLayout>
     <TextView
             android:text="Deadline"
@@ -142,7 +142,7 @@
                 android:id="@+id/projectid"
                 android:visibility="visible"
                 android:backgroundTint="#FFFFFF"
-                android:layout_marginLeft="15dp"/>
+                android:layout_marginLeft="15dp" android:singleLine="true"/>
     </android.support.design.widget.TextInputLayout>
     <Button
             android:text="Join"

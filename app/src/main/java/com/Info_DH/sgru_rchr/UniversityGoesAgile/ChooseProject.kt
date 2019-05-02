@@ -96,7 +96,42 @@ class ChooseProject : AppCompatActivity() {
                 val projectId = findViewById<View>(R.id.projectid) as TextView
                 val textfield = projectId.text.toString()
                 if (!textfield.isEmpty()) {
-                    joinProject()
+
+
+
+                    var _project = object : ValueEventListener {
+
+                        override fun onDataChange(p0: DataSnapshot) {
+
+                            println("öööööööööö:${p0}")
+                            if( p0.value != null) { //Hier kommt die Bedingung rein, die prüft, ob es das Projekt schon gibt.
+
+
+                                joinProject()
+
+                            }
+
+                            else {
+                              //  Toast.makeText(this, "New Project created successfully " + project.objectId, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@ChooseProject, "\"${textfield}\" ist keine valide ProjektID", Toast.LENGTH_SHORT).show()
+                            }
+
+
+
+                        }
+
+                        override fun onCancelled(p0: DatabaseError) {
+                            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                        }
+
+                    }
+
+
+
+
+
+                    _db.child(textfield).addValueEventListener(_project)
+
                 }
             })
 

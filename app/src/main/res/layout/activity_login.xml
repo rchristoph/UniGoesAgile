@@ -25,7 +25,7 @@
                 android:hint="Email"
                 android:layout_marginLeft="15dp"
                 android:backgroundTint="#FFFFFF"
-        />
+                android:singleLine="true"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
