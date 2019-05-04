@@ -19,6 +19,7 @@ import android.support.design.widget.NavigationView
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.*
@@ -30,6 +31,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_drawer.*
 import kotlinx.android.synthetic.main.app_bar_drawer.*
 import kotlinx.android.synthetic.main.content_drawer.*
+import kotlinx.android.synthetic.main.nav_phasenswitcher.*
 
 
 class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavigationItemSelectedListener  {
@@ -127,6 +129,25 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                     aa.notifyDataSetChanged()
                     aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spinner3?.adapter = aa
+
+                    //Hier wird die RecycleView mit den Phasen gefüllt:
+
+                    // Creates a vertical Layout Manager
+                    rv_phasenmenu.layoutManager = LinearLayoutManager(this@MainActivity)
+
+                    // You can use GridLayoutManager if you want multiple columns. Enter the number of columns as a parameter.
+//        rv_animal_list.layoutManager = GridLayoutManager(this, 2)
+
+                    // Access the RecyclerView Adapter and load the data into it
+                    rv_phasenmenu.adapter = PhasenMenuAdapter(arrayList, this@MainActivity)
+
+
+
+
+
+
+
+
                 }
 
             }

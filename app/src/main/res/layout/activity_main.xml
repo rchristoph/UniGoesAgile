@@ -108,8 +108,6 @@
              android:layout_height="match_parent"/>
 
 
-
-
     <android.support.design.widget.NavigationView
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"
@@ -117,15 +115,13 @@
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
             app:headerLayout="@layout/nav_header_drawer"
-            app:menu="@menu/activity_drawer_drawer">
+            app:menu="@menu/activity_drawer_drawer" app:itemBackground="@drawable/layout_background">
 
         <include
                 layout="@layout/nav_phasenswitcher"
                 android:layout_marginTop="350dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-
+                android:layout_height="match_parent" android:visibility="visible"/>
 
 
     </android.support.design.widget.NavigationView>

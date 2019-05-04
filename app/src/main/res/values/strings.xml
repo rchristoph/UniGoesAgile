@@ -46,6 +46,7 @@
     <string name="share">Share</string>
     <string name="send">Send</string>
     <string name="projektname">Projektname</string>
+    <string name="das_ist_nav_phasenswitcher">Das ist nav_phasenswitcher</string>
 
 
     <string-array name="city_list">
