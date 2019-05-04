@@ -23,11 +23,11 @@ class PhasenMenuAdapter(val items : ArrayList<String>, val context: Context) : R
 
     // Binds each animal in the ArrayList to a view
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.tvAnimalType?.text = items.get(position)
+        holder?.tvStage?.text = items.get(position)
     }
 }
 
 class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
     // Holds the TextView that will add each animal to
-    val tvAnimalType = view.tv_phase
+    val tvStage = view.tv_phase
 }

@@ -165,6 +165,8 @@ class AddTask : android.support.v4.app.DialogFragment() {
 
     fun addTask(){
 
+        val phasenlist = arguments?.getStringArrayList(EXTRA_LISTARRAY)
+
 
 
         //Declare and Initialise the Task
@@ -187,7 +189,7 @@ class AddTask : android.support.v4.app.DialogFragment() {
         //Set the values for new task in the firebase using the footer form
         newTask.setValue(task)
 
-        Toast.makeText(context, "New Task added to the List successfully" + task.objectId, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Aufgabe zu ${phasenlist!![phase.toInt()]} hinzugefügt.", Toast.LENGTH_SHORT).show()
     }
 
     /* fun getValues(view: View) {
