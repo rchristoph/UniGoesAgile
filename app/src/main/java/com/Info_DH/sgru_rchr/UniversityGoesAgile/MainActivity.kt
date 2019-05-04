@@ -142,12 +142,6 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                     rv_phasenmenu.adapter = PhasenMenuAdapter(arrayList, this@MainActivity)
 
 
-
-
-
-
-
-
                 }
 
             }

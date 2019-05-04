@@ -11,6 +11,8 @@ import kotlinx.android.synthetic.main.phasen_list_item.view.*
 
 class PhasenMenuAdapter(val items : ArrayList<String>, val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
+
+
     // Gets the number of animals in the list
     override fun getItemCount(): Int {
         return items.size
@@ -18,6 +20,11 @@ class PhasenMenuAdapter(val items : ArrayList<String>, val context: Context) : R
 
     // Inflates the item views
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+
+
+
+
+
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.phasen_list_item, parent, false))
     }
 
