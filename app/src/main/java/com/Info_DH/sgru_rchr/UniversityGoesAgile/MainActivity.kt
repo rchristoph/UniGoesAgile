@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 //        rv_animal_list.layoutManager = GridLayoutManager(this, 2)
 
                     // Access the RecyclerView Adapter and load the data into it
-                    rv_phasenmenu.adapter = PhasenMenuAdapter(arrayList, this@MainActivity,{ Items : String -> partItemClicked(Items) })
+                    rv_phasenmenu.adapter = PhasenMenuAdapter(arrayList, this@MainActivity,{ Items : Int -> partItemClicked(Items) })
 
 
                 }
@@ -251,6 +251,16 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         } else {
             super.onBackPressed()
         }
+    }
+
+    private fun partItemClicked(Items : Int) {
+        Toast.makeText(this, "Clicked: ${Items}", Toast.LENGTH_LONG).show()
+         phase = Items.toLong()
+
+        container.adapter.notifyDataSetChanged()
+
+
+
     }
 
     /**
@@ -424,9 +434,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
 
 
-    private fun partItemClicked(Items : String) {
-        Toast.makeText(this, "Clicked: ${Items}", Toast.LENGTH_LONG).show()
-    }
+
 
 /*    private fun loadPhasenList(dataSnapshot: DataSnapshot) {
         Log.d("ToDoActivity", "loadTaskList")

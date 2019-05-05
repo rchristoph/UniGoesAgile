@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.phasen_list_item.view.*
 
 
 
-class PhasenMenuAdapter(val items : ArrayList<String>, val context: Context, val clickListener: (String) -> Unit) : RecyclerView.Adapter<ViewHolder>() {
+class PhasenMenuAdapter(val items : ArrayList<String>, val context: Context, val clickListener: (Int) -> Unit) : RecyclerView.Adapter<ViewHolder>() {
 
 
 
@@ -31,7 +31,7 @@ class PhasenMenuAdapter(val items : ArrayList<String>, val context: Context, val
     // Binds each animal in the ArrayList to a view
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         holder?.tvStage?.text = items.get(position)
-        (holder as ViewHolder).bind(items[position], clickListener)
+        (holder as ViewHolder).bind(position, clickListener)
 
     }
 }
@@ -42,7 +42,7 @@ class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
 
 
 
-    fun bind(part: String, clickListener: (String) -> Unit){
+    fun bind(part: Int, clickListener: (Int) -> Unit){
 
         tvStage.setOnClickListener { clickListener(part)}
 
