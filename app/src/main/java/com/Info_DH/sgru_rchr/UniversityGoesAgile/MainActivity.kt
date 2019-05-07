@@ -258,10 +258,21 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
         container.adapter.notifyDataSetChanged()
 
-        drawer_layout.closeDrawer(GravityCompat.START)
 
         toolbar.setTitle("${dataSnapshot.child("projectName").value.toString()} | Phase: ${phase+1}/${arrayList.size}")
         setSupportActionBar(toolbar)
+
+        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
+            drawer_layout.closeDrawer(GravityCompat.START)
+            val toggle = ActionBarDrawerToggle(
+                this@MainActivity, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+            )
+            drawer_layout.addDrawerListener(toggle)
+            toggle.syncState()
+            nav_view.setNavigationItemSelectedListener(this@MainActivity)
+
+        }
+
 
 
     }
