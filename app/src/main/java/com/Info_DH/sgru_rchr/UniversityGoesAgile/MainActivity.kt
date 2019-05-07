@@ -103,9 +103,6 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                 // loadPhasenList(dataSnapshot)
                 if (dataSnapshot.child("Stages")!!.exists()) {
 
-
-
-
                     stageList!!.clear()
                     arrayList!!.clear()
 
@@ -130,16 +127,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                     aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spinner3?.adapter = aa
 
-                    //Hier wird die RecycleView mit den Phasen gefüllt:
 
-                    // Creates a vertical Layout Manager
-                    rv_phasenmenu.layoutManager = LinearLayoutManager(this@MainActivity)
-
-                    // You can use GridLayoutManager if you want multiple columns. Enter the number of columns as a parameter.
-//        rv_animal_list.layoutManager = GridLayoutManager(this, 2)
-
-                    // Access the RecyclerView Adapter and load the data into it
-                    rv_phasenmenu.adapter = PhasenMenuAdapter(arrayList, this@MainActivity,{ Items : Int -> partItemClicked(Items) })
 
 
                 }
@@ -192,6 +180,17 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
                     }
                 }
+
+                //Hier wird die RecycleView mit den Phasen gefüllt:
+
+                // Creates a vertical Layout Manager
+                rv_phasenmenu.layoutManager = LinearLayoutManager(this@MainActivity)
+
+                // You can use GridLayoutManager if you want multiple columns. Enter the number of columns as a parameter.
+//        rv_animal_list.layoutManager = GridLayoutManager(this, 2)
+
+                // Access the RecyclerView Adapter and load the data into it
+                rv_phasenmenu.adapter = PhasenMenuAdapter(arrayList, this@MainActivity,{ Items : Int -> partItemClicked(Items, dataSnapshot) })
 
 
 
@@ -253,12 +252,16 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         }
     }
 
-    private fun partItemClicked(Items : Int) {
+    private fun partItemClicked(Items : Int, dataSnapshot: DataSnapshot) {
         Toast.makeText(this, "Clicked: ${Items}", Toast.LENGTH_LONG).show()
          phase = Items.toLong()
 
         container.adapter.notifyDataSetChanged()
 
+        drawer_layout.closeDrawer(GravityCompat.START)
+
+        toolbar.setTitle("${dataSnapshot.child("projectName").value.toString()} | Phase: ${phase+1}/${arrayList.size}")
+        setSupportActionBar(toolbar)
 
 
     }
