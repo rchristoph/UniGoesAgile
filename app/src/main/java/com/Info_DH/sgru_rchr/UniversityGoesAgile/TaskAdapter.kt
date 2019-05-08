@@ -62,6 +62,10 @@ class TaskAdapter(context: Context, taskList: MutableList<Task>) : BaseAdapter()
             _rowListener.onTaskAssign (objectId)
         }
 
+        listRowHolder.assign.setOnClickListener {
+            _rowListener.onTaskAssigndelete (objectId)
+        }
+
         listRowHolder.remove.setOnClickListener {
             _rowListener.onTaskDelete(objectId) }
 

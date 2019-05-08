@@ -353,6 +353,16 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
         zsFassung(nickWert2, objectId)
     }
 
+    override fun onTaskAssigndelete(objectId: String){
+
+        var stelle = _dbprojekt.child(projektIdent).child("tasks/task").child(objectId).child("assignee")
+        stelle.setValue("leer")
+
+
+    }
+
+
+
     //Write the assigned user to the DB
     private fun zsFassung (nickWert:String, objectId: String) {
 

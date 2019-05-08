@@ -7,4 +7,5 @@ interface TaskRowListener {
     fun onTaskDelete(objectId: String)
     fun onTaskEdit(objectId: String, taskDesc:String)
     fun onTaskAssign(objectId: String)
+    fun onTaskAssigndelete (objectId: String)
 }
