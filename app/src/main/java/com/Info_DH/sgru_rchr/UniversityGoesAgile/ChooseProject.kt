@@ -94,10 +94,9 @@ class ChooseProject : AppCompatActivity() {
         //An einem vorhandenen Projekt teilnehmen
             joinButton.setOnClickListener(View.OnClickListener {
                 val projectId = findViewById<View>(R.id.projectid) as TextView
-                val textfield = projectId.text.toString()
+                var textfield = projectId.text.toString()
+                textfield = textfield.replace("\\s".toRegex(), "")
                 if (!textfield.isEmpty()) {
-
-
 
                     var _project = object : ValueEventListener {
 
@@ -155,7 +154,9 @@ class ChooseProject : AppCompatActivity() {
         var projectID = findViewById<View>(R.id.projectid) as TextView
         val user = mAuth.currentUser
         val uid = user!!.uid
-        mDatabase.child(uid).child("ProjektId").setValue(projectID.text.toString())
+        var projectIDtext: String = projectID.text.toString()
+        projectIDtext = projectIDtext.replace("\\s".toRegex(), "")
+        mDatabase.child(uid).child("ProjektId").setValue(projectIDtext)
         val newValue = _db.child(projectID.text.toString()).child("members")
         val nName = Members("")
         newValue.child(uid).setValue(nName)

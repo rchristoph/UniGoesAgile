@@ -34,7 +34,10 @@ import kotlinx.android.synthetic.main.content_drawer.*
 import kotlinx.android.synthetic.main.nav_phasenswitcher.*
 
 
+
 class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavigationItemSelectedListener  {
+
+
 
 
     lateinit var _dbuser: DatabaseReference
@@ -61,6 +64,8 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
+
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -70,6 +75,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
 
         _dbprojekt = FirebaseDatabase.getInstance().getReference("Projects")
+
         _dbuser = FirebaseDatabase.getInstance().getReference("Names")
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
