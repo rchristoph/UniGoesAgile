@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
     var nickWert2: String  = ""
     lateinit var stageList: MutableList<Phasen>
     lateinit var arrayList: ArrayList<String>
+    lateinit var assigneeList: ArrayList<String>
     var phase:Long = 0
     val obj = Todo()
 
@@ -64,13 +65,13 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         stageList = mutableListOf()
         arrayList = arrayListOf()
+        assigneeList = arrayListOf()
 
 
 
@@ -112,6 +113,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                     stageList!!.clear()
                     arrayList!!.clear()
 
+
                     for (h in dataSnapshot.child("Stages").child("Stage").children) {
                         val stage = h.getValue(Phasen::class.java)
                         println(h.getValue().toString())
@@ -125,6 +127,7 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
 
 
                     }
+
                     println("stagelist:::::: ${stageList}")
                     println("ArrayList:::: $arrayList")
 
@@ -132,6 +135,26 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
                     aa.notifyDataSetChanged()
                     aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spinner3?.adapter = aa
+
+
+
+
+                }
+                if (dataSnapshot.child("members")!!.exists()){
+                    assigneeList!!.clear()
+
+                    for (h in dataSnapshot.child("members").children) {
+                        val member = h.getValue(Members::class.java)
+                        println(h.getValue().toString())
+                        assigneeList.add(member!!.nickName)
+                        println("Stage.stageName = ${member.nickName}")
+
+
+                        println("stage::::::::$member")
+
+
+                    }
+
 
 
 
@@ -372,8 +395,18 @@ class MainActivity : AppCompatActivity(), TaskRowListener, NavigationView.OnNavi
     //Write the assigned user to the DB
     private fun zsFassung (nickWert:String, objectId: String) {
 
-        var stelle = _dbprojekt.child(projektIdent).child("tasks/task").child(objectId).child("assignee")
-        stelle.setValue(nickWert)
+
+
+
+
+            val dialog = AddAssignee.newInstance(title= "Aufgabe zuweisen", hint = "Name der Aufgabe", phasenlist = assigneeList, objectId = objectId)
+            dialog.show(supportFragmentManager, "editDescription")
+
+
+
+
+/*            var stelle = _dbprojekt.child(projektIdent).child("tasks/task").child(objectId).child("assignee")
+            stelle.setValue(nickWert)*/
 
     }
 
